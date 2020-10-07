@@ -9,12 +9,13 @@ body{
 }
 
 .carousel-inner img {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 500px;
 }
 
 .carousel-inner{
     text-align: center;
+    background-color: black;
 }
 
 .carousel{
