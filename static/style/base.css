@@ -1,3 +1,31 @@
 body{   
-    background-color:	#e87b3a;
+    background-color:	#e87b3a ;
+    padding-top: 60px;
 }
+
+.base-container{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: auto;
+}
+
+.carousel-inner{
+    text-align: center;
+}
+
+.carousel{
+    width: 75%;
+    margin: 0 auto;
+}
+
+h1 { 
+    border-bottom: 1px solid black
+ }
+
+ h2{
+    border-bottom: 1px dashed black
+ }
