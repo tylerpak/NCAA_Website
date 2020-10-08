@@ -1,0 +1,11 @@
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+}
+
+.carousel-inner{
+    text-align: center;
+    background-color: white;
+    border: 1px solid black;
+}
