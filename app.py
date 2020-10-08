@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from ncaam_bb_api import Player, Team, Game
-import pymongo
+import pymongo, re
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -9,7 +9,6 @@ db = client['cbidb']
 
 teamsDictionary = Team.populate()
 articles = db.articles
-# result = articles.insert(teamsDictionary)
 
 @app.route('/')
 def index():
@@ -18,7 +17,6 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/players')
 def players():
@@ -48,33 +46,32 @@ def player3():
 def team1():
     return render_template('longhorns.html')
 
-
 @app.route('/mountaineers')
 def team2():
     return render_template('mountaineers.html')
-
 
 @app.route('/sooners')
 def team3():
     return render_template('sooners.html')
 
-
 @app.route('/game1')
 def game1():
     return render_template('game1.html')
-
 
 @app.route('/game2')
 def game2():
     return render_template('game2.html')
 
-
 @app.route('/game3')
 def game3():
     return render_template('game3.html')
 
-
 if __name__ == "__main__":
-    # print(articles.count())
+    # Adds team mappings to database
+    for item in teamsDictionary:
+        teamName = item.replace('.', '_') #doesn't like team names with periods, replaced with _
+        teamId = int(teamsDictionary.get(item))
+        teamMapping = {teamName : teamsDictionary.get(item)}
+        result = articles.insert_one(teamMapping)
 
-    app.run(debug=True)
+    # app.run(debug=True)
