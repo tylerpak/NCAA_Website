@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %}{% endblock %}
+{% block body %}
+<h1>Teams:</h1>
+
+<p>Showing all teams we currently have information on</p>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-3 bg-success"><h4>TEAM NAME:</h4></div>
+    <div class="col-3 bg-success"><h4>CONFERENCE:</h4></div>
+    <div class="col-3 bg-success"><h4>RECORD W-L:</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/UT-logo.png')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="longhorns">TEXAS LONGHORNS</a></h4></div>
+    <div class="col-3"><h4>BIG 12</h4></div>
+    <div class="col-3"><h4>19-12</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/OU-logo.jpg')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="sooners">OKLAHOMA SOONERS</a></h4></div>
+    <div class="col-3"><h4>BIG 12</h4></div>
+    <div class="col-3"><h4>19-12</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/WV-logo.png')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="mountaineers">WEST VIRGINIA MOUNTAINEERS</a></h4></div>
+    <div class="col-3"><h4>BIG 12</h4></div>
+    <div class="col-3"><h4>21-10</h4></div>
+</div>
+{% endblock %}

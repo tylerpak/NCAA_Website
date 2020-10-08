@@ -1,0 +1,68 @@
+----NCAA MEN'S BASKETBALL ESPN API----
+
+
+Template:
+
+
+def collect_json(url, filename)
+	This function is for internal use only.
+
+def change_date(input, year)
+	This function is for internal use only.
+
+class Team()
+	Attributes:
+		-roster (list: [list: names (str), list ids (str)])
+		-schedule (dict: "game_id": [date, opponent, result, opponent_id])
+		-name (str)
+		-logo (link to image) (str)
+		-record (str)
+		-links (dict: "textDescription": "url"))
+
+	Methods:
+		-get_team_roster()
+			-INPUT: none
+			-OUTPUT: 3 lists
+				-names (list: type=str)
+				-player_ids (list: type=str)
+				-players (list: type=Player())
+			-Used internally
+
+		-get_team_schedule()
+			-INPUT: none
+			-OUTPUT: dict: "game_id": [date, opponent, result, opponent_id]
+			-Used internally
+
+		-populate()
+			-INPUT: none
+			-OUTPUT: dict: "team_name": "team_id"
+			-For user use. Created to quickly populate a model page with teams to link to
+
+class Player()
+	Attributes:
+		-name  (str)
+		-team/school (str)
+		-position (str)
+		-year (str)
+		-jersey (str)
+		-birthplace (str)
+		-height (str)
+		-weight (str)
+		-stats (list (str))
+			-points (str)
+			-assists (str)
+			-rebounds (str)
+		-links (dict: "textDescription": "url"))
+
+
+class Game()
+	Attributes:
+		-name (str)
+		-score (str)
+		-home team id (str)
+		-away team id (str)
+		-home team name (str)
+		-away team name (str)
+		-date (str)
+		-venue (str)
+		-links (dict: "textDescription": "url"))
