@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+.row {
+    text-align: center;
+    margin:0 auto;
+}
+.row .column{
+   display:inline-block;
+   vertical-align: middle;
+   float: none;
+}
+h4 {
+    text-align: center;
+}
+p {
+    text-align: center;
+}
+</style>
+{% endblock %}
+{% block body %}
+<br>
+<div class="row">
+    <div class="column"><img src="{{url_for('static', filename='/images/UT-logo.png')}}" alt="Jersey" width="200"></div>
+    <div class="column"><h1>VS</h1></div>
+    <div class="column"><img src="{{url_for('static', filename='/images/OU-logo.jpg')}}" alt="Jersey" width="100"></div>
+</div>
+<br>
+<h4>DATE</h4>
+<h4>23 FEB 2019</h4>
+<br>
+<h4>SCORE</h4>
+<h4>67 - 69</h4>
+<br>
+<p>Location: University of Texas</p>
+{% endblock %}
