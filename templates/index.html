@@ -2,7 +2,7 @@
 
 
 {% block head %}
-
+<link rel="stylesheet" href="static/style/index.css">
 {% endblock %}
 
 
@@ -22,13 +22,22 @@
     <!-- The slideshow -->
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="static/images/bball1.jpg" alt="Temp 1">
+        <a href="/players">
+          <h4 style="color:black; padding-top:10px;">Players<br></h4>
+          <img src="static/images/Players.jpg" alt="Players">
+        </a>
       </div>
       <div class="carousel-item">
-        <img src="static/images/bball2.jpg" alt="Temp 2">
+        <a href="/teams">
+          <h4 style="color:black; padding-top:10px;">Teams<br></h4>
+          <img src="static/images/Teams.jpg" alt="Teams">
+        </a>
       </div>
       <div class="carousel-item">
-        <img src="static/images/bball3.jpg" alt="Temp 3">
+        <a href="/games">
+          <h4 style="color:black; padding-top:10px;">Games<br></h4>
+          <img src="static/images/Games.jpg" alt="Games">
+        </a>
       </div>
     </div>
     
