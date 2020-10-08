@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %}{% endblock %}
+{% block body %}
+<h1>Players:</h1>
+
+<p>Showing all players we currently have information on</p>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-3 bg-success"><h4>PLAYER NAME:</h4></div>
+    <div class="col-3 bg-success"><h4>POSITION:</h4></div>
+    <div class="col-3 bg-success"><h4>SCHOOL:</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/UT-logo.png')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="royce-hamm">ROYCE HAMM JR.</a></h4></div>
+    <div class="col-3"><h4>FORWARD</h4></div>
+    <div class="col-3"><h4>UNIVERSITY OF TEXAS AT AUSTIN</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/OU-logo.jpg')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="jalen-hill">JALEN HILL</a></h4></div>
+    <div class="col-3"><h4>FORWARD</h4></div>
+    <div class="col-3"><h4>OAKLAHOMA UNIVERSITY</h4></div>
+</div>
+<div class="row">
+    <div class="col-3"><img src="{{url_for('static', filename='/images/WV-logo.png')}}" alt="Logo" style="width:80px;"></div>
+    <div class="col-3"><h4><a href="taz-sherman">TAZ SHERMAN</a></h4></div>
+    <div class="col-3"><h4>GUARD</h4></div>
+    <div class="col-3"><h4>WEST VIRGINIA UNIVERSITY</h4></div>
+</div>
+{% endblock %}
