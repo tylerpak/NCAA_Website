@@ -90,4 +90,5 @@ def allgames(team):
     return render_template('schedule.html', list=gamesPlayed, type='Games for {}'.format(team))
 
 if __name__ == "__main__":
+    populateDB()
     app.run(debug=True)
