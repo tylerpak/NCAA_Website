@@ -4,10 +4,8 @@ import pymongo, re
 from pymongo import MongoClient
 
 app = Flask(__name__)
-# client = MongoClient()
-# db = client['collegebasketballdb']
-# db.create_collection('Teams')
-# db.create_collection('Players')
+client = MongoClient()
+db = client['collegebasketballdb']
 
 teamsDictionary = Team.populate()
 playerDictionary = dict()
