@@ -1,7 +1,15 @@
 from flask import Flask, render_template
+from ncaam_bb_api import Player, Team, Game
+import pymongo, re
+from pymongo import MongoClient
 
 app = Flask(__name__)
+client = MongoClient()
+db = client['collegebasketballdb']
 
+teamsDictionary = Team.populate()
+playerDictionary = dict()
+gameDictionary = dict()
 
 @app.route('/')
 def index():
@@ -10,7 +18,6 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/players')
 def players():
@@ -40,31 +47,48 @@ def player3():
 def team1():
     return render_template('longhorns.html')
 
-
 @app.route('/mountaineers')
 def team2():
     return render_template('mountaineers.html')
-
 
 @app.route('/sooners')
 def team3():
     return render_template('sooners.html')
 
-
 @app.route('/game1')
 def game1():
     return render_template('game1.html')
-
 
 @app.route('/game2')
 def game2():
     return render_template('game2.html')
 
-
 @app.route('/game3')
 def game3():
     return render_template('game3.html')
 
+@app.route('/all-teams')
+def allteams():
+    return render_template('full-list.html', list=teamsDictionary, type='Teams')
+
+@app.route('/all-players/<string:team>')
+def allplayers(team):
+    team = team.replace('_', ' ')
+    team = Team(teamsDictionary.get(team))
+    teamRoster = team.get_team_roster()
+    return render_template('full-list.html', list=teamRoster[0], type='Players in {}'.format(team))
+
+@app.route('/all-games/<string:team>')
+def allgames(team):
+    team = team.replace('_', ' ')
+    team = Team(teamsDictionary.get(team))
+    teamSchedule = team.get_team_schedule()
+    gamesPlayed = list()
+    for gameId in teamSchedule:
+        gamesPlayed.append(teamSchedule.get(gameId))
+
+    return render_template('schedule.html', list=gamesPlayed, type='Games for {}'.format(team))
 
 if __name__ == "__main__":
+    populateDB()
     app.run(debug=True)

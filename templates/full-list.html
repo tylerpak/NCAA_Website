@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+<h1>List of all {{type}}:</h1>
+
+{% for listitem in list %}
+<ul>
+    {% if listitem == 'Texas Longhorns' %}
+        <li><a href="/all-players/Texas_Longhorns">{{listitem}}</a></li>
+    {% elif listitem == 'Oklahoma Sooners' %}
+        <li><a href="/all-players/Oklahoma_Sooners">{{listitem}}</a></li>
+    {% elif listitem == 'West Virginia Mountaineers' %}
+        <li><a href="/all-players/West_Virginia_Mountaineers">{{listitem}}</a></li>
+    {% else %}
+        <li>{{listitem}}</li>
+    {% endif %}
+</ul>
+{% endfor %}
+
+{% endblock %}
