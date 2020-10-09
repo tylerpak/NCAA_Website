@@ -4,11 +4,14 @@ import pymongo, re
 from pymongo import MongoClient
 
 app = Flask(__name__)
-client = MongoClient()
-db = client['cbidb']
+# client = MongoClient()
+# db = client['collegebasketballdb']
+# db.create_collection('Teams')
+# db.create_collection('Players')
 
 teamsDictionary = Team.populate()
-articles = db.articles
+playerDictionary = dict()
+gameDictionary = dict()
 
 @app.route('/')
 def index():
@@ -66,12 +69,27 @@ def game2():
 def game3():
     return render_template('game3.html')
 
-if __name__ == "__main__":
-    # Adds team mappings to database
-    for item in teamsDictionary:
-        teamName = item.replace('.', '_') #doesn't like team names with periods, replaced with _
-        teamId = int(teamsDictionary.get(item))
-        teamMapping = {teamName : teamsDictionary.get(item)}
-        result = articles.insert_one(teamMapping)
+@app.route('/all-teams')
+def allteams():
+    return render_template('full-list.html', list=teamsDictionary, type='Teams')
 
-    # app.run(debug=True)
+@app.route('/all-players/<string:team>')
+def allplayers(team):
+    team = team.replace('_', ' ')
+    team = Team(teamsDictionary.get(team))
+    teamRoster = team.get_team_roster()
+    return render_template('full-list.html', list=teamRoster[0], type='Players in {}'.format(team))
+
+@app.route('/all-games/<string:team>')
+def allgames(team):
+    team = team.replace('_', ' ')
+    team = Team(teamsDictionary.get(team))
+    teamSchedule = team.get_team_schedule()
+    gamesPlayed = list()
+    for gameId in teamSchedule:
+        gamesPlayed.append(teamSchedule.get(gameId))
+
+    return render_template('schedule.html', list=gamesPlayed, type='Games for {}'.format(team))
+
+if __name__ == "__main__":
+    app.run(debug=True)

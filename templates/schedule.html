@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+<h1>List of all {{type}}:</h1>
+
+{% for listitem in list %}
+<ul>
+    <li>{{listitem[0]}} against {{listitem[1]}}, {{listitem[2]}}</li>
+</ul>
+{% endfor %}
+
+{% endblock %}
