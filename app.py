@@ -1,7 +1,15 @@
 from flask import Flask, render_template
+from ncaam_bb_api import Player, Team, Game
+from pymongo import MongoClient
+
 
 app = Flask(__name__)
+client = MongoClient()
+db = client['basketballdb']
 
+# db.create_collection('Players')
+# db.create_collection('Teams')
+# db.create_collection('Games')
 
 @app.route('/')
 def index():
@@ -10,7 +18,6 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/players')
 def players():
@@ -67,4 +74,34 @@ def game3():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # db.get_collection('Teams').drop()
+
+    teamList = Team.populate()
+    for t in teamList:
+
+        if db.get_collection('Team').find_one({'_id': str(teamList.get(t))}) == False: #if not in database, get from API
+            print('added new team: {}'.format(t))
+            team = Team(teamList.get(t))
+            teamData = {'_id': team.team_id, 
+                'name': team.name, 
+                'record': team.record, 
+                'logo': team.logo, 
+                'roster_link': team.roster_link, 
+                'roster': team.roster, 
+                'links': team.links}
+            db.get_collection('Teams').insert_one(teamData)
+
+        # roster = team.get_team_roster()
+        # print(roster)
+        # p = roster[1][0]
+        # player = Player(p)
+        # print(p)
+        # if db.get_collection('Player').find_one(p) == False:
+        #     playerMap = {'_id': player.player_id, 'name': player.name, 'position': player.position}
+        #     db.get_collection('Players').insert_one(playerMap)
+            # if db.get_collection('Players').find_one()
+
+    # for article in db.get_collection('Teams').find():
+        # print(article)
+
+    # app.run(debug=True)
