@@ -1,15 +1,12 @@
 from flask import Flask, render_template
 from ncaam_bb_api import Player, Team, Game
 from pymongo import MongoClient
+from pprint import pprint
 
 
 app = Flask(__name__)
 client = MongoClient()
 db = client['basketballdb']
-
-# db.create_collection('Players')
-# db.create_collection('Teams')
-# db.create_collection('Games')
 
 @app.route('/')
 def index():
@@ -73,35 +70,33 @@ def game3():
     return render_template('game3.html')
 
 
-if __name__ == "__main__":
-    # db.get_collection('Teams').drop()
+def setupDB():
+    if len(db.list_collection_names()) == 0:
+        db.create_collection('Players')
+        db.create_collection('Teams')
+        db.create_collection('Games')
 
     teamList = Team.populate()
     for t in teamList:
+        in_db = db.get_collection('Teams').count_documents({'name': t})
+        teamData = None
 
-        if db.get_collection('Team').find_one({'_id': str(teamList.get(t))}) == False: #if not in database, get from API
-            print('added new team: {}'.format(t))
+        if in_db == 0: # if not in db, get info from API and add to db
             team = Team(teamList.get(t))
             teamData = {'_id': team.team_id, 
                 'name': team.name, 
                 'record': team.record, 
                 'logo': team.logo, 
                 'roster_link': team.roster_link, 
-                'roster': team.roster, 
+                'roster': team.roster,
                 'links': team.links}
             db.get_collection('Teams').insert_one(teamData)
 
-        # roster = team.get_team_roster()
-        # print(roster)
-        # p = roster[1][0]
-        # player = Player(p)
-        # print(p)
-        # if db.get_collection('Player').find_one(p) == False:
-        #     playerMap = {'_id': player.player_id, 'name': player.name, 'position': player.position}
-        #     db.get_collection('Players').insert_one(playerMap)
-            # if db.get_collection('Players').find_one()
+        else: # else find team in database
+            for article in db.get_collection('Teams').find({'name': t}).limit(1):
+                teamData = article
+            # pprint(teamData)
 
-    # for article in db.get_collection('Teams').find():
-        # print(article)
-
-    # app.run(debug=True)
+if __name__ == "__main__":
+    setupDB()
+    app.run(debug=True)

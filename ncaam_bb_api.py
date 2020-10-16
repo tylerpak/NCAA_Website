@@ -45,7 +45,6 @@ class Team:
 	def __init__(self, team_id, *args):
 		self.team_id = str(team_id)
 		response = requests.get(self.url+self.team_id).json()
-		# print(response)
 		if response["team"]["isActive"] == False:
 			self.logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
 		else:
