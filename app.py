@@ -4,9 +4,15 @@ from pymongo import MongoClient
 from pprint import pprint
 
 
+# password ='YQYk9tu9KWZVckXU'
+# mongodb_url = 'mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority'
 app = Flask(__name__)
-client = MongoClient()
+client = pymongo.MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
 db = client['basketballdb']
+
+teamCollection = db['Teams']
+playerCollection = db['Players']
+gameCollection = db['Games']
 
 @app.route('/')
 def index():
@@ -71,14 +77,9 @@ def game3():
 
 
 def setupDB():
-    if len(db.list_collection_names()) == 0:
-        db.create_collection('Players')
-        db.create_collection('Teams')
-        db.create_collection('Games')
-
     teamList = Team.populate()
     for t in teamList:
-        in_db = db.get_collection('Teams').count_documents({'name': t})
+        in_db = teamCollection.count_documents({'name': t})
         teamData = None
 
         if in_db == 0: # if not in db, get info from API and add to db
@@ -90,10 +91,10 @@ def setupDB():
                 'roster_link': team.roster_link, 
                 'roster': team.roster,
                 'links': team.links}
-            db.get_collection('Teams').insert_one(teamData)
+            teamCollection.insert_one(teamData)
 
         else: # else find team in database
-            for article in db.get_collection('Teams').find({'name': t}).limit(1):
+            for article in teamCollection.find({'name': t}).limit(1):
                 teamData = article
             # pprint(teamData)
 
