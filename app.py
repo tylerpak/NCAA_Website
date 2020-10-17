@@ -1,7 +1,8 @@
 from flask import Flask, render_template
+from pprint import pprint
+import database
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def index():
@@ -10,7 +11,6 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/players')
 def players():
@@ -67,4 +67,5 @@ def game3():
 
 
 if __name__ == "__main__":
+    # database.setupDB()
     app.run(debug=True)

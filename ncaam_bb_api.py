@@ -24,6 +24,8 @@ def change_date(input, year):
 	in_day = re.search(r"""(?:\d\d|\d)""", input).group()
 	if len(in_day) == 1:
 		in_day = "0"+in_day
+	if in_month == '11' or in_month == '12':
+		year = '2019'
 	return year+in_month+in_day
 
 
@@ -174,10 +176,27 @@ class Player:
 		self.team = response["athlete"]["team"]["displayName"]
 		self.position = response["athlete"]["position"]["displayName"]
 		self.year = response["athlete"]["displayExperience"]
-		self.jersey = response["athlete"]["displayJersey"]
-		self.birthplace = response["athlete"]["displayBirthPlace"]
-		self.height = response["athlete"]["displayHeight"]
-		self.weight = response["athlete"]["displayWeight"]
+
+		try:
+			self.jersey = response["athlete"]["displayJersey"]
+		except:
+			self.jersey = "--"
+
+		try:
+			self.birthplace = response["athlete"]["displayBirthPlace"]
+		except:
+			self.birthplace = "--"
+
+		try:
+			self.height = response["athlete"]["displayHeight"]
+		except:
+			self.height = "--' --\""
+
+		try:
+			self.weight = response["athlete"]["displayWeight"]
+		except:
+			self.weight = "-- lbs"
+
 		link = response["athlete"]["links"]
 		self.links = {}
 		for x in link:
@@ -212,24 +231,34 @@ class Game:
 
 	def __init__(self, game_id, date):
 		self.game_id = str(game_id)
-		self.date = str(date)
+		self.date = change_date(date, '2020')
 		response = requests.get(self.url+self.date+"&groups=50").json()
-		
-		for x in response["events"]:
-			if x["id"] == self.game_id:
-				game = x
-		
-		self.home_id = game["competitions"][0]["competitors"][0]["id"]
-		self.away_id = game["competitions"][0]["competitors"][1]["id"]
-		self.home_name = game["competitions"][0]["competitors"][0]["team"]["displayName"]
-		self.away_name = game["competitions"][0]["competitors"][1]["team"]["displayName"]
-		#self.date = game["date"]
-		self.name = game["name"]
-		self.venue = game["competitions"][0]["venue"]["fullName"]
-		link = game["links"]
-		self.links = {}
-		for x in link:
-			self.links[x["shortText"]] = [x["href"]]
+		game = None
+		try:
+			for x in response["events"]:
+				if x["id"] == self.game_id:
+					game = x
+			
+			self.home_id = game["competitions"][0]["competitors"][0]["id"]
+			self.away_id = game["competitions"][0]["competitors"][1]["id"]
+			self.home_name = game["competitions"][0]["competitors"][0]["team"]["displayName"]
+			self.away_name = game["competitions"][0]["competitors"][1]["team"]["displayName"]
+			#self.date = game["date"]
+			self.name = game["name"]
+			self.venue = game["competitions"][0]["venue"]["fullName"]
+			link = game["links"]
+			self.links = {}
+			for x in link:
+				self.links[x["shortText"]] = [x["href"]]
+		except:
+			if game == None:
+				self.home_id = "-1"
+				self.away_id = "-1"
+				self.home_name = "--"
+				self.away_name = "--"
+				self.name = "--"
+				self.venue = "--"
+				self.links = {}
 
 	def __str__(self):
 		return(self.name)
