@@ -1,18 +1,8 @@
 from flask import Flask, render_template
-from ncaam_bb_api import Player, Team, Game
-from pymongo import MongoClient
 from pprint import pprint
+import database
 
-
-# password ='YQYk9tu9KWZVckXU'
-# mongodb_url = 'mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority'
 app = Flask(__name__)
-client = pymongo.MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
-db = client['basketballdb']
-
-teamCollection = db['Teams']
-playerCollection = db['Players']
-gameCollection = db['Games']
 
 @app.route('/')
 def index():
@@ -76,28 +66,6 @@ def game3():
     return render_template('game3.html')
 
 
-def setupDB():
-    teamList = Team.populate()
-    for t in teamList:
-        in_db = teamCollection.count_documents({'name': t})
-        teamData = None
-
-        if in_db == 0: # if not in db, get info from API and add to db
-            team = Team(teamList.get(t))
-            teamData = {'_id': team.team_id, 
-                'name': team.name, 
-                'record': team.record, 
-                'logo': team.logo, 
-                'roster_link': team.roster_link, 
-                'roster': team.roster,
-                'links': team.links}
-            teamCollection.insert_one(teamData)
-
-        else: # else find team in database
-            for article in teamCollection.find({'name': t}).limit(1):
-                teamData = article
-            # pprint(teamData)
-
 if __name__ == "__main__":
-    setupDB()
+    # database.setupDB()
     app.run(debug=True)
