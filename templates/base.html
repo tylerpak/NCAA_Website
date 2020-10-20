@@ -16,8 +16,16 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% set site_name='College Basketball Internet Database' %}
+    {% set page_name=[]%}
     {% block head %}{% endblock %}
+    {% if page_name[0]==null %}
+        <title>{{site_name}}</title>
+    {% endif %}
+    {% if page_name[0] %}
+        {% set new_name = page_name[0] ~ ' - ' ~ site_name %}
+        <title>{{new_name}}</title>
+    {% endif %}
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top"> 
@@ -39,9 +47,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="games">Games</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about">About</a>
+                </li>
             </ul>
         </div>
-        <a class="navbar-brand text-right" href="/about"> About </a> 
     </nav>
     <div class="container-xl bg-white">
         {% block body %}{% endblock %}
