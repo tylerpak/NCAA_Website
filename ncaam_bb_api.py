@@ -178,6 +178,11 @@ class Player:
 		self.year = response["athlete"]["displayExperience"]
 
 		try:
+			self.headshot = response["athlete"]["headshot"]["href"]
+		except:
+			self.headshot = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+			
+		try:
 			self.jersey = response["athlete"]["displayJersey"]
 		except:
 			self.jersey = "--"
@@ -265,6 +270,9 @@ class Game:
 
 	def populate():
 		return
+
+
+
 
 #Games by date
 #https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?lang=en&region=us&limit=500&dates={date yyyymmdd}}&groups=50
