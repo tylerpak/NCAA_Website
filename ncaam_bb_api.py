@@ -178,6 +178,11 @@ class Player:
 		self.year = response["athlete"]["displayExperience"]
 
 		try:
+			self.headshot = response["athlete"]["headshot"]["href"]
+		except:
+			self.headshot = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+
+		try:
 			self.jersey = response["athlete"]["displayJersey"]
 		except:
 			self.jersey = "--"
@@ -260,11 +265,24 @@ class Game:
 				self.venue = "--"
 				self.links = {}
 
+		try:
+			self.thumbnail = game["competitions"][0]["headlines"][0]["video"][0]["thumbnail"]
+		except:
+			self.thumbnail = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+
+		try:
+			self.highlights = game["competitions"][0]["headlines"][0]["video"][0]["links"]["source"]["href"]
+		except:
+			self.highlights = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+
 	def __str__(self):
 		return(self.name)
 
 	def populate():
 		return
+
+
+
 
 #Games by date
 #https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?lang=en&region=us&limit=500&dates={date yyyymmdd}}&groups=50
