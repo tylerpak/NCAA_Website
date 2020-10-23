@@ -236,7 +236,7 @@ class Game:
 
 	def __init__(self, game_id, date):
 		self.game_id = str(game_id)
-		self.date = change_date(date, '2020')
+		self.date = str(date)
 		response = requests.get(self.url+self.date+"&groups=50").json()
 		game = None
 		try:

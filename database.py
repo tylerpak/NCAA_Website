@@ -1,6 +1,7 @@
 from ncaam_bb_api import Player, Team, Game
 from pymongo import MongoClient
 from pprint import pprint
+import re
 
 # Read only access to database, no writing allowed
 # Loads online database and its collections
@@ -55,7 +56,9 @@ def setupDB():
                     'away_name': game.away_name,
                     'name': game.name,
                     'venue': game.venue,
-                    'links': game.links
+                    'links': game.links,
+                    'thumbnail': game.thumbnail,
+                    'highlights': game.highlights
                 }
                 gameCollection.insert_one(gameData)
 
@@ -75,7 +78,8 @@ def setupDB():
                     'position': player.position,
                     'stats': player.stats,
                     'team': player.team,
-                    'weight': player.weight
+                    'weight': player.weight,
+                    'headshot': player.headshot
                 }
                 playerCollection.insert_one(playerData)
 
@@ -138,3 +142,61 @@ def getAllGames():
     for g in gameCollection.find():
         gameList.append(g)
     return gameList
+
+
+'''
+Returns a list of all entries in the database that contains the query
+Default search goes through all collections in database
+'''
+def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = True):
+    matches = []
+
+    if searchTeam:
+        for t in teamCollection.find():
+            for value in t.values():
+                if re.search(query, str(value)):
+                    matches.append(t)
+                    break
+    
+    if searchPlayer:
+        for p in playerCollection.find():
+            for value in p.values():
+                if re.search(query, str(value)):
+                    matches.append(p)
+                    break
+    
+    if searchGame:
+        for g in gameCollection.find():
+            for value in g.values():
+                if re.search(query, str(value)):
+                    matches.append(g)
+                    break
+
+    return matches
+
+
+'''
+Updates the database with new fields, or new values to exisiting fields
+Online database is up to date and read only, so don't call this method
+'''
+def updateDB():
+    for t in teamCollection.find():
+        team = Team(t['_id'])
+        teamData = {}
+        gameCollection.find_one_and_update({'_id': t['_id']}, {'$set': teamData})
+        
+    for g in gameCollection.find():
+        game = Game(g['_id'], g['date'])
+        
+        gameData = {
+            # 'thumbnail': game.thumbnail,
+            # 'highlights': game.highlights
+        }
+        gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
+    for p in playerCollection.find():
+        player = Player(p['_id'])
+        playerData = {
+            # 'headshot': player.headshot
+        }
+        playerCollection.find_one_and_update({'_id': p['_id']}, {'$set': playerData})
