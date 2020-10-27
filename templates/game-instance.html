@@ -38,7 +38,9 @@ p {
 <div class="row">
     <div class="column">
         <h4>PLAYERS:</h4>
-        <h4><a href="royce-hamm">Royce Hamm</a></h4>
+        {% for player in home['roster'][0] %}
+        <h4><a href="player-instance{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% endfor %}
     </div>
     <div class="column">
         <h4>DATE</h4>
@@ -50,7 +52,9 @@ p {
     </div>
     <div class="column">
         <h4>PLAYERS:</h4>
-        <h4><a href="jalen-hill">Jalen Hill</a></h4>
+        {% for player in away['roster'][0] %}
+        <h4><a href="player-instance{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
