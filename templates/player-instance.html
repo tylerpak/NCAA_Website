@@ -27,15 +27,14 @@ p {
 {% block body %}
 <br>
 <div class="container">
-    <img src="/static/images/UT-logo.png" alt="Jersey" width="300">
+    <img src="{{ player['headshot'] }}" alt="Headshot" width="300">
 </div>
 <br>
-<h4>Longhorns</h4>
-<br>
-<p>School: University of Texas</p>
-<p>Conference: Big 12</p>
-<p>Record: 19-12</p>
-<p>Featured Games: <a href="game3">09 FEB 2019</a>, <a href="game1">23 FEB 2019</a></p>
-<p>Featured Player: <a href="royce-hamm">Royce Hamm</a></p>
-
+<h4>{{ player['name'] }}</h4>
+<p>Team: {{ player['team'] }}</p>
+<p>Position: {{  player['position'] }}</p>
+<p>Birthplace: {{ player['birthplace'] }}</p>
+<p>Height: {{ player['height'] }}</p>
+<p>Weight: {{ player['weight'] }}</p>
+<p>Stats: {{ player['stats']}}</p>
 {% endblock %}

@@ -27,14 +27,12 @@ p {
 {% block body %}
 <br>
 <div class="container">
-    <img src="/static/images/jersey1.jpg" alt="Jersey" width="300">
-    <div class="centered"><h1>1</h1></div>
+    <img src="{{ team['logo'] }}" alt="Logo" width="300">
 </div>
 <br>
-<h4>Jalen Hill</h4>
-<p>School: <a href="sooners">OKLAHOMA University</a></p>
-<p>Position: Forward</p>
-<p>Year: Sophmore</p>
-<p>Height/Weight: 6-7ft/225lbs</p>
-<p>Featured Games: <a href="game2">02 FEB 2019</a>, <a href="game1">23 FEB 2019</a></p>
+<h4>{{ team['name'] }}</h4>
+<br>
+<p>External links: {{ team['links'] }}</p>
+<p>Record: {{ team['record'] }}</p>
+
 {% endblock %}

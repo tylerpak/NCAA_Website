@@ -13,7 +13,7 @@
     text-align: center;
     margin:0 auto;
 }
-.row .column {
+.row .column{
    display:inline-block;
    vertical-align: middle;
    float: none;
@@ -29,28 +29,27 @@ p {
 {% block body %}
 <br>
 <div class="row">
-    <div class="column"><a href="mountaineers"><img src="/static/images/WV-logo.png" alt="WV Logo" width="150"></a></div>
+    <div class="column"><a href="team-instance{{ home['_id'] }}"><img src="{{ home['logo'] }}" alt="Home Logo" width="200"></a></div>
     <div class="column"><h1>VS</h1></div>
-    <div class="column"><a href="longhorns"><img src="/static/images/UT-logo.png" alt="UT Logo" width="200"></a></div>
+    <div class="column"><a href="team-instance{{ away['_id'] }}"><img src="{{ away['logo'] }}" alt="Away Logo" width="200"></a></div>
 </div>
 <br>
-<div class = "row">
-    <div class="column">
-        <h4>PLAYERS:</h4>
-        <h4><a href="taz-sherman">Taz Sherman</a></h4>
-    </div>
-    <div class="column">
-       <h4>DATE</h4>
-        <h4>09 FEB 2019</h4>
-        <br>
-        <h4>SCORE</h4>
-        <h4>53 - 75</h4>
-        <br>
-        <p>Location: West Virginia University</p>
-    </div>
+<div class="row">
     <div class="column">
         <h4>PLAYERS:</h4>
         <h4><a href="royce-hamm">Royce Hamm</a></h4>
+    </div>
+    <div class="column">
+        <h4>DATE</h4>
+        <h4>{{ game['date'] }}</h4>
+        <br>
+        <h4>VENUE</h4>
+        <h4>{{ game['venue'] }}</h4>
+        <br>
+    </div>
+    <div class="column">
+        <h4>PLAYERS:</h4>
+        <h4><a href="jalen-hill">Jalen Hill</a></h4>
     </div>
 </div>
 {% endblock %}

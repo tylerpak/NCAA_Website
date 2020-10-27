@@ -109,7 +109,7 @@ Returns a dictionary of the Game if database has the teamId, None otherwise
 '''
 def getGame(gameId):
     game = None
-    for g in playerCollection.find({'_id': str(gameId)}).limit(1):
+    for g in gameCollection.find({'_id': str(gameId)}).limit(1):
         game = g
     return game
 
@@ -117,31 +117,59 @@ def getGame(gameId):
 '''
 Returns a list of all Team dictionaries in database
 '''
-def getAllTeams():
+def getAllTeams(page_number):
     teamList = []
-    for t in teamCollection.find():
+    for t in teamCollection.find().skip(24 * (page_number - 1)).limit(24):
         teamList.append(t)
     return teamList
 
 
 '''
+Returns number of pages necessary for teams 
+'''
+def getAllTeamsPgCount():
+    x = 0
+    for t in teamCollection.find():
+        x = x + 1
+    return x/24
+
+
+
+'''
 Returns a list of all Player dictionaries in database
 '''
-def getAllPlayers():
+def getAllPlayers(page_number):
     playerList = []
-    for p in playerCollection.find():
+    for p in playerCollection.find().skip(24*(page_number-1)).limit(24):
         playerList.append(p)
     return playerList
 
+'''
+Returns number of pages necessary for players 
+'''
+def getAllPlayersPgCount():
+    x = 0
+    for p in playerCollection.find():
+        x = x + 1
+    return x/24
 
 '''
 Returns a list of all Games dictionaries in database
 '''
-def getAllGames():
+def getAllGames(page_number):
     gameList = []
-    for g in gameCollection.find():
+    for g in gameCollection.find().skip(24 * (page_number - 1)).limit(24):
         gameList.append(g)
     return gameList
+
+'''
+Returns number of pages necessary for teams 
+'''
+def getAllGamesPgCount():
+    x = 0
+    for g in gameCollection.find():
+        x = x + 1
+    return x/24
 
 
 '''
