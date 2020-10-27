@@ -36,5 +36,8 @@ p {
 <p>Birthplace: {{ player['birthplace'] }}</p>
 <p>Height: {{ player['height'] }}</p>
 <p>Weight: {{ player['weight'] }}</p>
-<p>Stats: {{ player['stats']}}</p>
+
+{% for stat in stats %}
+<p>{{stat['displayName']}}: {{stat['displayValue']}}</p>
+{% endfor %}
 {% endblock %}
