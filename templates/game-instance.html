@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+{% set _ = page_name.append(game['away_name'] ~ ' vs ' ~ game['home_name']) %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 .column {
