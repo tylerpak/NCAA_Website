@@ -2,37 +2,47 @@
 
 {% block head %}
 {% set _ = page_name.append('Games') %}
+<style>
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+</style>
 {% endblock %}
 {% block body %}
 <h1>Games:</h1>
 
 <p>Showing all games we currently have information on</p>
+
+{% for row in games | batch(4) %}
 <div class="row">
-    <div class="col-2"></div>
-    <div class="col-2"></div>
-    <div class="col-2 bg-success"><h4>GAME DATE:</h4></div>
-    <div class="col-2 bg-success"><h4>HOME TEAM:</h4></div>
-    <div class="col-2 bg-success"><h4>AWAY TEAM:</h4></div>
+    {% for column in row %}
+    <div class="col-3 bg-success">
+        <a href="game-instance{{ column['_id'] }}"><img src="{{ column['thumbnail'] }}" alt="Thumbnail" style="width:80px;"></a>
+        <h4>{{ column['name'] }}</h4>
+        <h6>Venue: {{ column['venue'] }}</h6>
+        <h6>HOME TEAM: {{ column['home_name'] }}</h6>
+        <h6>AWAY TEAM: {{ column['away_name'] }}</h6>
+    </div>
+    {% endfor %}
+   <br>
 </div>
-<div class="row">
-    <div class="col-2"><img src="/static/images/UT-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><img src="/static/images/OU-logo.jpg" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><h4><a href="game1">23 FEB 2019</a></h4></div>
-    <div class="col-2"><h4>TEXAS</h4></div>
-    <div class="col-2"><h4>OKLAHOMA</h4></div>
+{% endfor %}
+
+
+<div class="pagination">
+  <a href="#">&laquo;</a>
+  <a href="games{{ cur_page - 1 }}">{{ cur_page - 1 }}</a>
+  <a href="games{{ cur_page }}">{{ cur_page }}</a>
+    <a href="games{{ cur_page + 1 }}">{{ cur_page + 1 }}</a>
+  <a href="#">&raquo;</a>
 </div>
-<div class="row">
-    <div class="col-2"><img src="/static/images/WV-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><img src="/static/images/OU-logo.jpg" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><h4><a href="game2">02 FEB 2019</a></h4></div>
-    <div class="col-2"><h4>WEST VIRGINIA</h4></div>
-    <div class="col-2"><h4>OKLAHOMA</h4></div>
-</div>
-<div class="row">
-    <div class="col-2"><img src="/static/images/WV-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><img src="/static/images/UT-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-2"><h4><a href="game3">09 FEB 2019</a></h4></div>
-    <div class="col-2"><h4>WEST VIRGINIA</h4></div>
-    <div class="col-2"><h4>TEXAS</h4></div>
-</div>
+
 {% endblock %}

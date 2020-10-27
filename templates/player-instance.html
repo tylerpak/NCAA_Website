@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
 {% block head %}
+{% set _ = page_name.append(player['name']) %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 .container {
@@ -27,14 +27,14 @@ p {
 {% block body %}
 <br>
 <div class="container">
-    <img src="/static/images/jersey1.jpg" alt="Jersey" width="300">
-    <div class="centered"><h1>1</h1></div>
+    <img src="{{ player['headshot'] }}" alt="Headshot" width="300">
 </div>
 <br>
-<h4>Jalen Hill</h4>
-<p>School: <a href="sooners">OKLAHOMA University</a></p>
-<p>Position: Forward</p>
-<p>Year: Sophmore</p>
-<p>Height/Weight: 6-7ft/225lbs</p>
-<p>Featured Games: <a href="game2">02 FEB 2019</a>, <a href="game1">23 FEB 2019</a></p>
+<h4>{{ player['name'] }}</h4>
+<p>Team: {{ player['team'] }}</p>
+<p>Position: {{  player['position'] }}</p>
+<p>Birthplace: {{ player['birthplace'] }}</p>
+<p>Height: {{ player['height'] }}</p>
+<p>Weight: {{ player['weight'] }}</p>
+<p>Stats: {{ player['stats']}}</p>
 {% endblock %}
