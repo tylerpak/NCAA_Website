@@ -2,33 +2,45 @@
 
 {% block head %}
 {% set _ = page_name.append('Teams') %}
+<style>
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+</style>
 {% endblock %}
 {% block body %}
 <h1>Teams:</h1>
 
 <p>Showing all teams we currently have information on</p>
+
+{% for row in teams | batch(4) %}
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-3 bg-success"><h4>TEAM NAME:</h4></div>
-    <div class="col-3 bg-success"><h4>CONFERENCE:</h4></div>
-    <div class="col-3 bg-success"><h4>RECORD W-L:</h4></div>
+    {% for column in row %}
+    <div class="col-3 bg-success">
+        <a href="team-instance{{ column['_id']}}"><img src="{{ column['logo'] }}" alt="logo" style="width:80px;"></a>
+        <h4>{{ column['name'] }}</h4>
+        <h6>RECORD: {{ column['record'] }}</h6>
+    </div>
+    {% endfor %}
+   <br>
 </div>
-<div class="row">
-    <div class="col-3"><img src="/static/images/UT-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-3"><h4><a href="longhorns">TEXAS LONGHORNS</a></h4></div>
-    <div class="col-3"><h4>BIG 12</h4></div>
-    <div class="col-3"><h4>19-12</h4></div>
+{% endfor %}
+
+
+<div class="pagination">
+  <a href="#">&laquo;</a>
+  <a href="teams{{ cur_page - 1 }}">{{ cur_page - 1 }}</a>
+  <a href="teams{{ cur_page }}">{{ cur_page }}</a>
+    <a href="teams{{ cur_page + 1 }}">{{ cur_page + 1 }}</a>
+  <a href="#">&raquo;</a>
 </div>
-<div class="row">
-    <div class="col-3"><img src="/static/images/OU-logo.jpg" alt="Logo" style="width:80px;"></div>
-    <div class="col-3"><h4><a href="sooners">OKLAHOMA SOONERS</a></h4></div>
-    <div class="col-3"><h4>BIG 12</h4></div>
-    <div class="col-3"><h4>19-12</h4></div>
-</div>
-<div class="row">
-    <div class="col-3"><img src="/static/images/WV-logo.png" alt="Logo" style="width:80px;"></div>
-    <div class="col-3"><h4><a href="mountaineers">WEST VIRGINIA MOUNTAINEERS</a></h4></div>
-    <div class="col-3"><h4>BIG 12</h4></div>
-    <div class="col-3"><h4>21-10</h4></div>
-</div>
+
 {% endblock %}
