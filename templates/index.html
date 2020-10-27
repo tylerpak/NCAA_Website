@@ -14,26 +14,26 @@
 
     <!-- Indicators -->
     <ul class="carousel-indicators">
-      <li data-target="#home-car" data-slide-to="0" class="active"></li>
-      <li data-target="#home-car" data-slide-to="1"></li>
-      <li data-target="#home-car" data-slide-to="2"></li>
+      <li data-target="#home-car" data-slide-to="0" class="active" id="player-car-activate"></li>
+      <li data-target="#home-car" data-slide-to="1" id="team-car-activate"></li>
+      <li data-target="#home-car" data-slide-to="2" id="game-car-activate"></li>
     </ul>
     
     <!-- The slideshow -->
     <div class="carousel-inner">
-      <div class="carousel-item active">
+      <div class="carousel-item active" id="player-car">
         <a href="/players">
           <h4 style="color:black; padding-top:10px;">Players<br></h4>
           <img src="static/images/Players.jpg" alt="Players">
         </a>
       </div>
-      <div class="carousel-item">
+      <div class="carousel-item" id="team-car">
         <a href="/teams">
           <h4 style="color:black; padding-top:10px;">Teams<br></h4>
           <img src="static/images/Teams.jpg" alt="Teams">
         </a>
       </div>
-      <div class="carousel-item">
+      <div class="carousel-item" id="game-car">
         <a href="/games">
           <h4 style="color:black; padding-top:10px;">Games<br></h4>
           <img src="static/images/Games.jpg" alt="Games">
