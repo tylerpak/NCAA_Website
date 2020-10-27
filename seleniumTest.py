@@ -7,7 +7,7 @@ class seleniumTest(unittest.TestCase):
 
     #Tests navigation to about page and back to home page
     def test_about(self):  
-        driver = webdriver.Firefox(executable_path=r"/home/jburrus/Documents/geckodriver")
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
         # edit the next line to enter the location of "min.html" on your system
         driver.get(r"http://127.0.0.1:5000/")
 
@@ -28,7 +28,7 @@ class seleniumTest(unittest.TestCase):
         driver.close() # close the browser window
 
     def test_carousel(self):  
-        driver = webdriver.Firefox(executable_path=r"/home/jburrus/Documents/geckodriver")
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
         # edit the next line to enter the location of "min.html" on your system
         driver.get(r"http://127.0.0.1:5000/")
 
@@ -71,7 +71,7 @@ class seleniumTest(unittest.TestCase):
         driver.close() # close the browser window
 
     def test_playerModel(self):  
-        driver = webdriver.Firefox(executable_path=r"/home/jburrus/Documents/geckodriver")
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
         # edit the next line to enter the location of "min.html" on your system
         driver.get(r"http://127.0.0.1:5000/")
 
@@ -85,7 +85,7 @@ class seleniumTest(unittest.TestCase):
         driver.close() # close the browser window
 
     def test_teamModel(self):  
-        driver = webdriver.Firefox(executable_path=r"/home/jburrus/Documents/geckodriver")
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
         # edit the next line to enter the location of "min.html" on your system
         driver.get(r"http://127.0.0.1:5000/")
 
@@ -99,7 +99,7 @@ class seleniumTest(unittest.TestCase):
         driver.close() # close the browser window
 
     def test_gameModel(self):  
-        driver = webdriver.Firefox(executable_path=r"/home/jburrus/Documents/geckodriver")
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
         # edit the next line to enter the location of "min.html" on your system
         driver.get(r"http://127.0.0.1:5000/")
 
