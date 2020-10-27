@@ -48,7 +48,7 @@ def games(page_number):
 @app.route('/player-instance<id>')
 def player1(id):
     player = database.getPlayer(id)
-    return render_template('player-instance.html', player = player)
+    return render_template('player-instance.html', player = player, stats = player['stats'])
 
 
 @app.route('/team-instance<id>')
