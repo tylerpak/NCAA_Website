@@ -17,6 +17,21 @@
   transform: translate(-50%, -50%);
 }
 
+.column {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+
+.row {
+    text-align: center;
+    margin:0 auto;
+}
+.row .column{
+   display:inline-block;
+   vertical-align: middle;
+   float: none;
+}
 h4 {
     text-align: center;
 }
@@ -32,8 +47,20 @@ p {
 </div>
 <br>
 <h4>{{ team['name'] }}</h4>
-<br>
-<p>External links: {{ team['links'] }}</p>
+<div class="row">
+    <div class="column">
+        <h4>Roster:</h4>
+        {% for player in team['roster'][0] %}
+            <h4><a href="player-instance{{ team['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% endfor %}
+    </div>
+    <div class="column">
+        <h4>Schedule:</h4>
+        {% for game in team['schedule'] %}
+            <h4><a href="game-instance{{ game }}">{{ team['schedule'][game][0] }}</a></h4>
+        {% endfor %}
+    </div>
+</div>
 <p>Record: {{ team['record'] }}</p>
 
 {% endblock %}
