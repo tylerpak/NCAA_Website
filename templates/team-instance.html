@@ -51,7 +51,11 @@ p {
     <div class="column">
         <h4>Roster:</h4>
         {% for player in team['roster'][0] %}
-            <h4><a href="player-instance{{ team['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+            {% if  player_exists(team['roster'][1][loop.index-1])   %}
+            <h4><a href="player-instance{{ team['roster'][1][loop.index-1] }}" id="player" name ="{{ team['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+            {% else %}  
+            <h4>{{ player }} </h4>
+            {% endif %}
         {% endfor %}
     </div>
     <div class="column">
@@ -63,7 +67,7 @@ p {
                 <h4>{{ team['schedule'][game][0] }}</h4>
                 </div> 
                 <div class ="column">
-                <h4><a href="game-instance{{ game }}">{{get_gameName(game)}}</a></h4>
+                <h4><a href="game-instance{{ game }}" id="team">{{get_gameName(game)}}</a></h4>
                 </div>
             {% else %}
             <div class ="column">

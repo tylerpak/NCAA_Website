@@ -30,16 +30,20 @@ p {
 {% block body %}
 <br>
 <div class="row">
-    <div class="column"><a href="team-instance{{ home['_id'] }}"><img src="{{ home['logo'] }}" alt="Home Logo" width="200"></a></div>
+    <div class="column"><a href="team-instance{{ home['_id'] }}" id="home"><img src="{{ home['logo'] }}" alt="Home Logo" width="200"></a></div>
     <div class="column"><h1>VS</h1></div>
-    <div class="column"><a href="team-instance{{ away['_id'] }}"><img src="{{ away['logo'] }}" alt="Away Logo" width="200"></a></div>
+    <div class="column"><a href="team-instance{{ away['_id'] }}" id="away"><img src="{{ away['logo'] }}" alt="Away Logo" width="200"></a></div>
 </div>
 <br>
 <div class="row">
     <div class="column">
         <h4>PLAYERS:</h4>
         {% for player in home['roster'][0] %}
-        <h4><a href="player-instance{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% if  player_exists(home['roster'][1][loop.index-1])   %}
+        <h4><a href="player-instance{{ home['roster'][1][loop.index-1] }}" id="player" name ="{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% else %}  
+        <h4>{{ player }} </h4>
+        {% endif %}
         {% endfor %}
     </div>
     <div class="column">
@@ -53,7 +57,11 @@ p {
     <div class="column">
         <h4>PLAYERS:</h4>
         {% for player in away['roster'][0] %}
-        <h4><a href="player-instance{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% if  player_exists(away['roster'][1][loop.index-1])   %}
+        <h4><a href="player-instance{{ away['roster'][1][loop.index-1] }}" id="player" name ="{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
+        {% else %}  
+        <h4>{{ player }} </h4>
+        {% endif %}
         {% endfor %}
     </div>
 </div>
