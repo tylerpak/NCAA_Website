@@ -55,6 +55,11 @@ def game1(id):
     away = database.getTeam(away_id)
     return render_template('game-instance.html', home=home, away=away, game=game)
 
+@app.context_processor
+def utility_processor():
+    def game_exists(id):
+        return database.gameCollection.count_documents({'_id': id})
+    return dict(game_exists=game_exists)
 
 
 
