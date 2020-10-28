@@ -57,7 +57,27 @@ p {
     <div class="column">
         <h4>Schedule:</h4>
         {% for game in team['schedule'] %}
+<<<<<<< HEAD
             <h4><a href="game-instance{{ game }}" id="game" name="{{game}}">{{ team['schedule'][game][0] }}</a></h4>
+=======
+            <div class="row">
+            {% if  game_exists(game)   %}
+                <div class ="column">
+                <h4>{{ team['schedule'][game][0] }}</h4>
+                </div> 
+                <div class ="column">
+                <h4><a href="game-instance{{ game }}">{{get_gameName(game)}}</a></h4>
+                </div>
+            {% else %}
+            <div class ="column">
+                <h4>{{ team['schedule'][game][0] }}</h4>
+                </div> 
+                <div class ="column">
+                    <h4>----</h4>
+                </div>
+            {% endif %}
+            </div>
+>>>>>>> missing-games
         {% endfor %}
     </div>
 </div>
