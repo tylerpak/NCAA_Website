@@ -2,6 +2,10 @@ import unittest
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 
 class seleniumTest(unittest.TestCase):
 
@@ -24,49 +28,6 @@ class seleniumTest(unittest.TestCase):
         result = driver.title
 
         self.assertEqual('College Basketball Internet Database', result)
-
-        driver.close() # close the browser window
-
-    def test_carousel(self):  
-        driver = webdriver.Firefox(executable_path=r"./geckodriver")
-        # edit the next line to enter the location of "min.html" on your system
-        driver.get(r"http://127.0.0.1:5000/")
-
-
-        elem = driver.find_element_by_id('player-car-activate')
-        elem.click() #click the button
-        elem = driver.find_element_by_id('player-car')
-        elem.click() #click the button
-
-        result = driver.title
-
-        self.assertEqual('Players - College Basketball Internet Database', result)
-
-        elem = driver.find_element_by_id('homeButton')
-        elem.click() #click the button
-
-
-        elem = driver.find_element_by_id('team-car-activate')
-        elem.click() #click the button
-        elem = driver.find_element_by_id('team-car')
-        elem.click() #click the button
-
-        result = driver.title
-
-        self.assertEqual('Teams - College Basketball Internet Database', result)
-
-        elem = driver.find_element_by_id('homeButton')
-        elem.click() #click the button
-
-
-        elem = driver.find_element_by_id('game-car-activate')
-        elem.click() #click the button
-        elem = driver.find_element_by_id('game-car')
-        elem.click() #click the button
-
-        result = driver.title
-
-        self.assertEqual('Games - College Basketball Internet Database', result)
 
         driver.close() # close the browser window
 
@@ -111,6 +72,110 @@ class seleniumTest(unittest.TestCase):
         self.assertEqual('Games - College Basketball Internet Database', result)
 
         driver.close() # close the browser window
+    
+    def test_gameInstances(self):  
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000/games1")
+
+        elems = driver.find_elements_by_id('reference')
+        i=0
+        while i < 0:
+            elems = driver.find_elements_by_id('reference')
+            elem = elems[i]
+            elem.click()
+
+            team = driver.find_element_by_id('home')
+            team.click()
+            result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+            driver.back()
+
+            team = driver.find_element_by_id('away')
+            team.click()
+            result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+            driver.back()
+
+            players = driver.find_elements_by_id('player')
+            j=0
+            while j < len(players):
+                players = driver.find_elements_by_id('player')
+                player = players[j]
+                player.click()
+                result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+                driver.back()
+                j = j+1
+            driver.back()
+            i = i+1
+
+        driver.close() # close the browser window
+
+    def test_playerInstances(self):  
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000/players1")
+
+        elems = driver.find_elements_by_id('reference')
+        i=0
+        while i < 0:
+            elems = driver.find_elements_by_id('reference')
+            elem = elems[i]
+            elem.click()
+
+            team = driver.find_element_by_id('team')
+            team.click()
+            result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+            driver.back()
+
+            driver.back()
+            i = i+1
+
+        driver.close() # close the browser window
+
+
+    def test_teamInstances(self):  
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000/teams1")
+
+        elems = driver.find_elements_by_id('reference')
+        i=0
+        while i < len(elems):
+            elems = driver.find_elements_by_id('reference')
+            elem = elems[i]
+            elem.click()
+
+            players = driver.find_elements_by_id('player')
+            j=0
+            while j < len(players):
+                players = driver.find_elements_by_id('player')
+                player = players[j]
+                player.click()
+                result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+                driver.back()
+                j = j+1
+
+            games = driver.find_elements_by_id('game')
+            j=0
+            while j < len(games):
+                games = driver.find_elements_by_id('game')
+                game = games[j]
+                game.click()
+                result = driver.title
+                self.assertEqual('Internet Database',result[-12:])
+                driver.back()
+                j = j+1
+
+
+            driver.back()
+            i = i+1
+
+        driver.close() # close the browser window
+    
 
 if __name__ == '__main__':
     unittest.main()
