@@ -61,6 +61,14 @@ def utility_processor():
         return database.gameCollection.count_documents({'_id': id})
     return dict(game_exists=game_exists)
 
+@app.context_processor
+def utility_processor2():
+    def get_gameName(id):
+        game = database.getGame(id)
+        name = game['home_name'] + ' vs ' + game['away_name']
+        return name
+    return dict(get_gameName=get_gameName)
+
 
 
 if __name__ == "__main__":
