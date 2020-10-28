@@ -31,10 +31,13 @@ p {
 </div>
 <br>
 <h4>{{ player['name'] }}</h4>
-<p>Team: {{ player['team'] }}</p>
+<a href="team-instance{{ team['_id'] }}"> <p>Team: {{ player['team'] }}</p></a>
 <p>Position: {{  player['position'] }}</p>
 <p>Birthplace: {{ player['birthplace'] }}</p>
 <p>Height: {{ player['height'] }}</p>
 <p>Weight: {{ player['weight'] }}</p>
-<p>Stats: {{ player['stats']}}</p>
+
+{% for stat in stats %}
+<p>{{stat['displayName']}}: {{stat['displayValue']}}</p>
+{% endfor %}
 {% endblock %}

@@ -14,6 +14,11 @@
   text-decoration: none;
 }
 
+.pagination a.active {
+  background-color: #ff6600;
+  color: white;
+}
+
 </style>
 {% endblock %}
 {% block body %}
@@ -24,7 +29,7 @@
 {% for row in games | batch(4) %}
 <div class="row">
     {% for column in row %}
-    <div class="col-3 bg-success">
+    <div class="col-3" style="background-color:white;">
         <a href="game-instance{{ column['_id'] }}"><img src="{{ column['thumbnail'] }}" alt="Thumbnail" style="width:80px;"></a>
         <h4>{{ column['name'] }}</h4>
         <h6>Venue: {{ column['venue'] }}</h6>
@@ -38,11 +43,23 @@
 
 
 <div class="pagination">
-  <a href="#">&laquo;</a>
+  {% if cur_page > 1 %}
+  <a href="games{{ cur_page - 1 }}">&laquo;</a>
+    {% if cur_page > 2 %}
+    <a href="games{{ cur_page - 2 }}">{{ cur_page - 2 }}</a>
+    {% endif %}
   <a href="games{{ cur_page - 1 }}">{{ cur_page - 1 }}</a>
-  <a href="games{{ cur_page }}">{{ cur_page }}</a>
+    {% endif %}
+  <a class="active" href="games{{ cur_page }}">{{ cur_page }}</a>
+    {% if cur_page < pages %}
+    {% if cur_page < pages-1 %}
     <a href="games{{ cur_page + 1 }}">{{ cur_page + 1 }}</a>
-  <a href="#">&raquo;</a>
+    {% endif %}
+    {% if cur_page < pages-2 %}
+    <a href="games{{ cur_page + 2 }}">{{ cur_page + 2 }}</a>
+    {% endif %}
+  <a href="games{{ cur_page + 1 }}">&raquo;</a>
+    {% endif %}
 </div>
 
 {% endblock %}
