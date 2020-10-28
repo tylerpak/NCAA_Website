@@ -29,7 +29,7 @@
 {% for row in games | batch(4) %}
 <div class="row">
     {% for column in row %}
-    <div class="col-3 bg-success">
+    <div class="col-3" style="background-color:white;">
         <a href="game-instance{{ column['_id'] }}"><img src="{{ column['thumbnail'] }}" alt="Thumbnail" style="width:80px;"></a>
         <h4>{{ column['name'] }}</h4>
         <h6>Venue: {{ column['venue'] }}</h6>
