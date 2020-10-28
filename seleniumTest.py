@@ -80,7 +80,7 @@ class seleniumTest(unittest.TestCase):
 
         elems = driver.find_elements_by_id('reference')
         i=0
-        while i < 0:
+        while i < len(elems):
             elems = driver.find_elements_by_id('reference')
             elem = elems[i]
             elem.click()
@@ -88,13 +88,13 @@ class seleniumTest(unittest.TestCase):
             team = driver.find_element_by_id('home')
             team.click()
             result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+            self.assertEqual('Internet Database',result[-17:])
             driver.back()
 
             team = driver.find_element_by_id('away')
             team.click()
             result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+            self.assertEqual('Internet Database',result[-17:])
             driver.back()
 
             players = driver.find_elements_by_id('player')
@@ -104,7 +104,7 @@ class seleniumTest(unittest.TestCase):
                 player = players[j]
                 player.click()
                 result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+                self.assertEqual('Internet Database',result[-17:])
                 driver.back()
                 j = j+1
             driver.back()
@@ -119,7 +119,7 @@ class seleniumTest(unittest.TestCase):
 
         elems = driver.find_elements_by_id('reference')
         i=0
-        while i < 0:
+        while i < len(elems):
             elems = driver.find_elements_by_id('reference')
             elem = elems[i]
             elem.click()
@@ -127,8 +127,19 @@ class seleniumTest(unittest.TestCase):
             team = driver.find_element_by_id('team')
             team.click()
             result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+            self.assertEqual('Internet Database',result[-17:])
             driver.back()
+
+            games = driver.find_elements_by_id('game')
+            j=0
+            while j < len(games):
+                games = driver.find_elements_by_id('game')
+                game = games[j]
+                game.click()
+                result = driver.title
+                self.assertEqual('Internet Database',result[-17:])
+                driver.back()
+                j = j+1
 
             driver.back()
             i = i+1
@@ -155,7 +166,7 @@ class seleniumTest(unittest.TestCase):
                 player = players[j]
                 player.click()
                 result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+                self.assertEqual('Internet Database',result[-17:])
                 driver.back()
                 j = j+1
 
@@ -166,7 +177,7 @@ class seleniumTest(unittest.TestCase):
                 game = games[j]
                 game.click()
                 result = driver.title
-                self.assertEqual('Internet Database',result[-12:])
+                self.assertEqual('Internet Database',result[-17:])
                 driver.back()
                 j = j+1
 

@@ -70,6 +70,12 @@ def utility_processor2():
         return name
     return dict(get_gameName=get_gameName)
 
+@app.context_processor
+def utility_processor():
+    def player_exists(id):
+        return database.playerCollection.count_documents({'_id': id})
+    return dict(player_exists=player_exists)
+
 
 
 if __name__ == "__main__":
