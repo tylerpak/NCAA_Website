@@ -17,10 +17,6 @@ def players(page_number):
     players = database.getAllPlayers(int(page_number))
     pages = database.getAllPlayersPgCount()
     cur_page = int(page_number)
-    if cur_page < 2:
-        cur_page = 2
-    if cur_page == pages:
-        cur_page = cur_page - 1
     return render_template('player-model.html', players=players, pages = pages, cur_page = cur_page)
 
 @app.route('/teams<page_number>')
@@ -28,10 +24,6 @@ def teams(page_number):
     teams = database.getAllTeams(int(page_number))
     pages = database.getAllTeamsPgCount()
     cur_page = int(page_number)
-    if cur_page < 2:
-        cur_page = 2
-    if cur_page == pages:
-        cur_page = cur_page - 1
     return render_template('team-model.html', teams=teams, pages = pages, cur_page = cur_page)
 
 @app.route('/games<page_number>')
@@ -39,16 +31,13 @@ def games(page_number):
     games = database.getAllGames(int(page_number))
     pages = database.getAllGamesPgCount()
     cur_page = int(page_number)
-    if cur_page < 2:
-        cur_page = 2
-    if cur_page == pages:
-        cur_page = cur_page - 1
     return render_template('game-model.html', games=games, pages = pages, cur_page = cur_page)
 
 @app.route('/player-instance<id>')
 def player1(id):
     player = database.getPlayer(id)
-    return render_template('player-instance.html', player = player, stats = player['stats'])
+    team = database.searchDatabase(player['team'], True, False, False)
+    return render_template('player-instance.html', player = player, stats = player['stats'], team=team[0])
 
 
 @app.route('/team-instance<id>')
@@ -67,6 +56,25 @@ def game1(id):
     away = database.getTeam(away_id)
     return render_template('game-instance.html', home=home, away=away, game=game)
 
+@app.context_processor
+def utility_processor():
+    def game_exists(id):
+        return database.getGame(id)
+    return dict(game_exists=game_exists)
+
+@app.context_processor
+def utility_processor2():
+    def get_gameName(id):
+        game = database.getGame(id)
+        name = game['home_name'] + ' vs ' + game['away_name']
+        return name
+    return dict(get_gameName=get_gameName)
+
+@app.context_processor
+def utility_processor3():
+    def player_exists(id):
+        return database.getPlayer(id)
+    return dict(player_exists=player_exists)
 
 
 

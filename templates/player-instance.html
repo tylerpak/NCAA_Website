@@ -15,6 +15,21 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.column {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+
+.row {
+    text-align: center;
+    margin:0 auto;
+}
+.row .column{
+   display:inline-block;
+   vertical-align: middle;
+   float: none;
+}
 
 h4 {
     text-align: center;
@@ -31,13 +46,41 @@ p {
 </div>
 <br>
 <h4>{{ player['name'] }}</h4>
-<p>Team: {{ player['team'] }}</p>
+<a href="team-instance{{ team['_id'] }}"> <p id="team">Team: {{ player['team'] }}</p></a>
 <p>Position: {{  player['position'] }}</p>
 <p>Birthplace: {{ player['birthplace'] }}</p>
 <p>Height: {{ player['height'] }}</p>
 <p>Weight: {{ player['weight'] }}</p>
 
 {% for stat in stats %}
+{% if stat['displayValue'] == '0.0' %}
+<p>{{stat['displayName']}}: unknown</p>
+{% else %}
 <p>{{stat['displayName']}}: {{stat['displayValue']}}</p>
+{% endif %}
 {% endfor %}
+<div class="row">
+<div class="container">
+<h4>Schedule:</h4>
+        {% for game in team['schedule'] %}
+            <div class="row">
+            {% if  game_exists(game)   %}
+                <div class ="column">
+                <h4>{{ team['schedule'][game][0] }}</h4>
+                </div> 
+                <div class ="column">
+                <h4><a href="game-instance{{ game }}" id="game">{{get_gameName(game)}}</a></h4>
+                </div>
+            {% else %}
+            <div class ="column">
+                <h4>{{ team['schedule'][game][0] }}</h4>
+                </div> 
+                <div class ="column">
+                    <h4>----</h4>
+                </div>
+            {% endif %}
+            </div>
+        {% endfor %}
+</div>
+</div>
 {% endblock %}

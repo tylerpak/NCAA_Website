@@ -208,10 +208,10 @@ Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
-    for t in teamCollection.find():
-        team = Team(t['_id'])
-        game_dict = team.get_team_schedule()
-        teamCollection.find_one_and_update({'_id': t['_id']}, {'$set': {'schedule': game_dict}})
+    # for t in teamCollection.find():
+    #     team = Team(t['_id'])
+    #     game_dict = team.get_team_schedule()
+    #     teamCollection.find_one_and_update({'_id': t['_id']}, {'$set': {'schedule': game_dict}})
         
     # for g in gameCollection.find():
         # game = Game(g['_id'], g['date'])
@@ -220,7 +220,8 @@ def updateDB():
         #     'home_id': game.home_id,
         #     'away_id': game.away_id
         #     # 'thumbnail': game.thumbnail,
-        #     # 'highlights': game.highlights
+        #     # 'highlights': game.highlights,
+            # 'score': game.score
         # }
         # if teamCollection.count({'_id': game.away_id}) == 0:
             # print("not away: {}".format(gameCollection.count({'away_id': game.away_id})))
