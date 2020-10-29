@@ -102,7 +102,7 @@ def search(search, team, player, game):
 @app.context_processor
 def utility_processor():
     def game_exists(id):
-        return database.gameCollection.count_documents({'_id': id})
+        return database.getGame(id)
     return dict(game_exists=game_exists)
 
 @app.context_processor
@@ -112,6 +112,12 @@ def utility_processor2():
         name = game['home_name'] + ' vs ' + game['away_name']
         return name
     return dict(get_gameName=get_gameName)
+
+@app.context_processor
+def utility_processor3():
+    def player_exists(id):
+        return database.getPlayer(id)
+    return dict(player_exists=player_exists)
 
 
 

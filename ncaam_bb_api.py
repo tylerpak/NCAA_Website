@@ -230,13 +230,15 @@ Attributes:
 	-venue
 	-stats
 	-links
+	-thumbnail
+	-highlights
 '''
 class Game:
 	url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?lang=en&region=us&limit=500&dates="
 
 	def __init__(self, game_id, date):
 		self.game_id = str(game_id)
-		self.date = str(date)
+		self.date = change_date(date, '2020')
 		response = requests.get(self.url+self.date+"&groups=50").json()
 		game = None
 		try:
@@ -251,6 +253,7 @@ class Game:
 			#self.date = game["date"]
 			self.name = game["name"]
 			self.venue = game["competitions"][0]["venue"]["fullName"]
+			self.score = game["competitions"][0]["competitors"][0]["score"] + "-" + game["competitions"][0]["competitors"][1]["score"]
 			link = game["links"]
 			self.links = {}
 			for x in link:
@@ -263,6 +266,7 @@ class Game:
 				self.away_name = "--"
 				self.name = "--"
 				self.venue = "--"
+				self.score = "--"
 				self.links = {}
 
 		try:

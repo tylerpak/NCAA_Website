@@ -207,23 +207,34 @@ Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
-    for t in teamCollection.find():
-        team = Team(t['_id'])
-        teamData = {}
-        gameCollection.find_one_and_update({'_id': t['_id']}, {'$set': teamData})
+    return 0
+    # for t in teamCollection.find():
+    #     team = Team(t['_id'])
+    #     game_dict = team.get_team_schedule()
+    #     teamCollection.find_one_and_update({'_id': t['_id']}, {'$set': {'schedule': game_dict}})
         
-    for g in gameCollection.find():
-        game = Game(g['_id'], g['date'])
+    # for g in gameCollection.find():
+        # game = Game(g['_id'], g['date'])
         
-        gameData = {
-            # 'thumbnail': game.thumbnail,
-            # 'highlights': game.highlights
-        }
-        gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+        # gameData = {
+        #     'home_id': game.home_id,
+        #     'away_id': game.away_id
+        #     # 'thumbnail': game.thumbnail,
+        #     # 'highlights': game.highlights,
+            # 'score': game.score
+        # }
+        # if teamCollection.count({'_id': game.away_id}) == 0:
+            # print("not away: {}".format(gameCollection.count({'away_id': game.away_id})))
+            # print("not home: {}".format(gameCollection.count({'home_id': game.away_id})))
+            # gameCollection.delete_many({'away_id': game.away_id})
+            # gameCollection.delete_many({'home_id': game.away_id})
 
-    for p in playerCollection.find():
-        player = Player(p['_id'])
-        playerData = {
-            # 'headshot': player.headshot
-        }
-        playerCollection.find_one_and_update({'_id': p['_id']}, {'$set': playerData})
+    # for p in playerCollection.find():
+    #     player = Player(p['_id'])
+    #     playerData = {
+    #         'team': player.team
+    #         # 'headshot': player.headshot
+    #     }
+    #     if teamCollection.count(playerData) == 0:
+    #         playerCollection.delete_many(playerData)
+    #         # playerCollection.find_one_and_update({'_id': p['_id']}, {'$set': playerData})

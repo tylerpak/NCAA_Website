@@ -46,7 +46,7 @@ p {
 </div>
 <br>
 <h4>{{ player['name'] }}</h4>
-<p>Team: <a href="team-instance{{ team['_id'] }}">{{ player['team'] }}</a></p>
+<a href="team-instance{{ team['_id'] }}"> <p id="team">Team: {{ player['team'] }}</p></a>
 <p>Position: {{  player['position'] }}</p>
 <p>Birthplace: {{ player['birthplace'] }}</p>
 <p>Height: {{ player['height'] }}</p>
@@ -69,7 +69,7 @@ p {
                 <h4>{{ team['schedule'][game][0] }}</h4>
                 </div> 
                 <div class ="column">
-                <h4><a href="game-instance{{ game }}">{{get_gameName(game)}}</a></h4>
+                <h4><a href="game-instance{{ game }}" id="game">{{get_gameName(game)}}</a></h4>
                 </div>
             {% else %}
             <div class ="column">
