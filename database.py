@@ -208,6 +208,7 @@ Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
+    return 0
     # for t in teamCollection.find():
     #     team = Team(t['_id'])
     #     game_dict = team.get_team_schedule()
