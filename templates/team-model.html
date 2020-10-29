@@ -19,12 +19,46 @@
   color: white;
 }
 
+.form .search-container {
+  float: left;
+}
+
+.form input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  width: 50%;
+  font-size: 17px;
+  border: 1px solid grey;
+}
+
+.form .search-container button {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+
+.form .search-container button:hover {
+  background: #ccc;
+}
+
 </style>
 {% endblock %}
 {% block body %}
 <h1>Teams:</h1>
 
 <p>Showing all teams we currently have information on</p>
+<div class="form">
+        <form action="/teams1" method="POST">
+            <input type="text" name="content" id="content" placeholder="Search for team by name or player..">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+
 
 {% for row in teams | batch(4) %}
 <div class="row">

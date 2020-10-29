@@ -19,12 +19,47 @@
   color: white;
 }
 
+.form .search-container {
+  float: left;
+  margin-right: 32px;
+}
+
+.form input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 32px;
+  width: 50%;
+  font-size: 17px;
+  border: 1 px solid grey;
+}
+
+.form .search-container button {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 32px;
+  background: #ddd;
+  font-size: 17px;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+
+.form .search-container button:hover {
+  background: #ccc;
+}
+
 </style>
 {% endblock %}
 {% block body %}
 <h1>Games:</h1>
 
 <p>Showing all games we currently have information on</p>
+<div class="form">
+        <form action="/games1" method="POST">
+            <input type="text" name="content" id="content" placeholder="Search by teams, date, venue..">
+            <input type="submit" value="Search">
+        </form>
+    </div>
 
 {% for row in games | batch(4) %}
 <div class="row">

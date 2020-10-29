@@ -199,8 +199,7 @@ def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = T
                 if re.search(query, str(value)):
                     matches.append(g)
                     break
-
-    return matches
+    return matches[:24]
 
 
 '''
