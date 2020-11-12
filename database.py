@@ -1,4 +1,4 @@
-from ncaam_bb_api import Player, Team, Game
+from ncaam_bb_api import Player, Team, Game, News
 from pymongo import MongoClient
 from pprint import pprint
 import re
@@ -10,6 +10,7 @@ db = client['basketballdb']
 teamCollection = db['Teams']
 playerCollection = db['Players']
 gameCollection = db['Games']
+newsCollection = db['News']
 
 
 '''
@@ -82,6 +83,16 @@ def setupDB():
                     'headshot': player.headshot
                 }
                 playerCollection.insert_one(playerData)
+    
+    news = News()
+
+    for a in news.articles:
+        newsData = {
+            'headline': a['headline'],
+            'description': a['description'],
+            'images': a['images']
+        }
+        newsCollection.insert(newsData)
 
 
 '''
@@ -115,6 +126,23 @@ def getGame(gameId):
 
 
 '''
+Finds all news that contains the keyword in the headline or description
+'''
+def getRelatedNews(keyword):
+    newsList = []
+
+    splitWords = keyword.split()
+
+    for n in newsCollection.find():
+        for word in splitWords:
+            if re.search(word, n['description']) or re.search(word, n['headline']):
+                newsList.append(n)
+                break
+    
+    return newsList
+
+
+'''
 Returns a list of all Team dictionaries in database
 '''
 def getAllTeams(page_number):
@@ -132,7 +160,6 @@ def getAllTeamsPgCount():
     for t in teamCollection.find():
         x = x + 1
     return x/24
-
 
 
 '''
@@ -208,6 +235,16 @@ Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
     return 0
+    # news = News()
+
+    # for a in news.articles:
+    #     newsData = {
+    #         'headline': a['headline'],
+    #         'description': a['description'],
+    #         'images': a['images']
+    #     }
+    #     newsCollection.insert(newsData)
+
     # for t in teamCollection.find():
     #     team = Team(t['_id'])
     #     game_dict = team.get_team_schedule()

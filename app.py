@@ -58,12 +58,14 @@ def games(page_number):
 def player1(id):
     player = database.getPlayer(id)
     team = database.searchDatabase(player['team'], True, False, False)
+    news = database.getRelatedNews(player['name'])
     return render_template('player-instance.html', player = player, stats = player['stats'], team=team[0])
 
 
 @app.route('/team-instance<id>')
 def team1(id):
     team = database.getTeam(id)
+    news = database.getRelatedNews(team['name'])
     return render_template('team-instance.html', team=team)
 
 
