@@ -47,16 +47,20 @@ p {
     vertical-align: middle;
 }
 
+.schedule .row{
+    border-bottom: 1px dashed black;
+}
+
 </style>
 {% endblock %}
 {% block body %}
 <h1>{{player['name']}}</h1>
 
 <div class="container stats">
-    <div class="row" >
+    <div class="row align-items-center" >
         <div class="column">
             <div class="container">
-                <img src="{{ player['headshot'] }}" alt="Headshot" height="300" width="auto">
+                <img src="{{ player['headshot'] }}" alt="Headshot" width="100%" >
             </div>
         </div>
         <div class="column">
@@ -83,34 +87,39 @@ p {
             {% for stat in stats %}
             <div class="row">
                 <div class="column">{{stat['displayName']}}</div>
+                {% if stat['displayValue'] == '0.0' %}
+                <div class="column">--</div>
+                {% else %}
                 <div class="column">{{stat['displayValue']}}</div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<div class="container">
+
+<div class="container schedule">
     <h2 style="text-align: left;">Schedule</h2>
-        {% for game in team['schedule'] %}
-            <div class="row">
-            {% if  game_exists(game)   %}
-                <div class ="column">
-                <h4>{{ team['schedule'][game][0] }}</h4>
-                </div> 
-                <div class ="column">
-                <h4><a href="game-instance{{ game }}" id="game">{{get_gameName(game)}}</a></h4>
-                </div>
-            {% else %}
+    {% for game in team['schedule'] %}
+        <div class="row">
+        {% if  game_exists(game)   %}
             <div class ="column">
-                <h4>{{ team['schedule'][game][0] }}</h4>
-                </div> 
-                <div class ="column">
-                    <h4>----</h4>
-                </div>
-            {% endif %}
+            <h5>{{ team['schedule'][game][0] }}</h5>
+            </div> 
+            <div class ="column">
+            <h5><a href="game-instance{{ game }}" id="team">{{get_gameName(game)}}</a></h5>
             </div>
-        {% endfor %}
+        {% else %}
+        <div class ="column">
+            <h5>{{ team['schedule'][game][0] }}</h5>
+            </div> 
+            <div class ="column">
+                <h5>----</h5>
+            </div>
+        {% endif %}
+        </div>
+    {% endfor %}
 </div>
 </div>
 {% endblock %}
