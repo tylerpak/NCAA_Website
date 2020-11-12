@@ -69,3 +69,11 @@ class Game()
 		-links (dict: "textDescription": "url"))
 		-thumbnail (str)
 		-highlights (str)
+
+class News()
+	Attributes:
+		-articles = {
+			-headline (str)
+			-description (str)
+			-images (list str)
+		}

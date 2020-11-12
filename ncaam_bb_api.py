@@ -286,7 +286,61 @@ class Game:
 		return
 
 
+'''
+Attributes:
+	-Headline
+	-Description
+	-Image
+'''
+class News():
+	url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/news"
 
+	def __init__(self):
+		response = requests.get(self.url).json()
+		self.articles = []
+		for x in response["articles"]:
+			
+			#check if article is about mens bb
+			ncaam_flag = False
+			for y in x["categories"]:
+				
+				try:
+					sportId = int(y["sportId"])
+				except:
+					sportId = -1
+				
+				if sportId == 41:
+					ncaam_flag = True
+
+
+
+			if ncaam_flag:
+				images = []
+				try:
+					for z in x["images"]:
+						images.append(z["url"])
+				except:
+					images = []
+
+				try:
+					temp = {
+						"headline": x["headline"],
+						"description": x["description"],
+						"images": images,
+					}
+				except:
+					temp = {
+						"headline": None,
+						"description": None,
+						"images": None,
+					}
+			else:
+				temp = {
+						"headline": None,
+						"description": None,
+						"images": None,
+					}
+			self.articles.append(temp)
 
 #Games by date
 #https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?lang=en&region=us&limit=500&dates={date yyyymmdd}}&groups=50
