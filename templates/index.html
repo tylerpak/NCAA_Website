@@ -7,6 +7,17 @@
 
 
 {% block body %}
+<div class="form">
+        <form action="/" method="POST" id="search">
+            <input type="text" name="content" id="content" placeholder="Search">
+            <select name="filter" id="filter">
+                <option value="players">Players</option>
+                <option value="teams">Teams</option>
+                <option value="games">Games</option>
+            </select>
+            <input type="submit" value="Search">
+        </form>
+</div>
 <h1>Home</h1>
 <h2 style="text-align:center;"><b>Welcome to the College Basketball Internet Database!</b></h2>
 
