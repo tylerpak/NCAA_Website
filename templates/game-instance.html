@@ -28,16 +28,25 @@ p {
 </style>
 {% endblock %}
 {% block body %}
+<h1>{{game['home_name'] ~ ' vs ' ~ game['away_name']}}</h1>
 <br>
-<div class="row">
-    <div class="column"><a href="team-instance{{ home['_id'] }}" id="home"><img src="{{ home['logo'] }}" alt="Home Logo" width="200"></a></div>
-    <div class="column"><h1>VS</h1></div>
-    <div class="column"><a href="team-instance{{ away['_id'] }}" id="away"><img src="{{ away['logo'] }}" alt="Away Logo" width="200"></a></div>
+<div class="row align-items-center">
+    <div class="column">
+        <a href="team-instance{{ home['_id'] }}" id="home"><img src="{{ home['logo'] }}" alt="Home Logo" width="100%"></a>
+        <h3>{{game['home_name']}}</h3>
+    </div>
+    <div class="column">
+        <h1 style="border:none">VS</h1>
+    </div>
+    <div class="column">
+        <a href="team-instance{{ away['_id'] }}" id="away"><img src="{{ away['logo'] }}" alt="Away Logo" width="100%"></a>
+        <h3>{{game['away_name']}}</h3>
+    </div>
 </div>
 <br>
 <div class="row">
     <div class="column">
-        <h4>PLAYERS:</h4>
+        <h4>Roster:</h4>
         {% for player in home['roster'][0] %}
         {% if  player_exists(home['roster'][1][loop.index-1])   %}
         <h4><a href="player-instance{{ home['roster'][1][loop.index-1] }}" id="player" name ="{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
@@ -48,7 +57,7 @@ p {
     </div>
     <div class="column">
         <h4>DATE</h4>
-        <h4>{{ game['date'] }}</h4>
+        <h4>{{ game['date'][4:6] }}-{{ game['date'][6:8] }}-{{ game['date'][0:4] }}</h4>
         <br>
         <h4>VENUE</h4>
         <h4>{{ game['venue'] }}</h4>
@@ -59,7 +68,7 @@ p {
         <img src="{{ game['thumbnail'] }}" alt="Thumbnail" width="200">
     </div>
     <div class="column">
-        <h4>PLAYERS:</h4>
+        <h4>Roster:</h4>
         {% for player in away['roster'][0] %}
         {% if  player_exists(away['roster'][1][loop.index-1])   %}
         <h4><a href="player-instance{{ away['roster'][1][loop.index-1] }}" id="player" name ="{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
