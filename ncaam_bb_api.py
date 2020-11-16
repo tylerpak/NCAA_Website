@@ -2,6 +2,7 @@ import requests
 import json
 import time
 import re
+import youtube_search
 
 sportsio_url = "https://api.sportsdata.io/v3/cbb/scores/json/"
 api_key = "ee65f6fe551f4fe98d0b63c5c96b2279"
@@ -268,6 +269,12 @@ class Game:
 				self.venue = "--"
 				self.score = "--"
 				self.links = {}
+
+		try:
+			query = self.home_name + " vs " + self.away_name + " basketball"
+			self.youtube_highlights = youtube_search.search_for_video(query)
+		except:
+			self.youtube_highlights = None
 
 		try:
 			self.thumbnail = game["competitions"][0]["headlines"][0]["video"][0]["thumbnail"]
