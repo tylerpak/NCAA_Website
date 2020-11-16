@@ -226,7 +226,7 @@ def autocomplete(model):
     if re.match('team', model) or re.match('all', model):
         for t in teamCollection.find():
             matches.append(t['name'])
-            for player in t['roster'][1]:
+            for player in t['roster'][0]:
                 matches.append(player)
 
     if re.match('player', model) or re.match('all', model):
