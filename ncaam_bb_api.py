@@ -271,8 +271,10 @@ class Game:
 				self.links = {}
 
 		try:
-			query = self.home_name + " vs " + self.away_name + " basketball"
-			self.youtube_highlights = youtube_search.search_for_video(query)
+			self.short_home_name = game["competitions"][0]["competitors"][0]["team"]["shortDisplayName"]
+			self.short_away_name = game["competitions"][0]["competitors"][1]["team"]["shortDisplayName"]
+			query = self.home_name + " vs " + self.away_name + " Basketball " + date
+			self.youtube_highlights = youtube_search.search_for_video(query, date)
 		except:
 			self.youtube_highlights = None
 

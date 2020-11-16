@@ -2,7 +2,7 @@
 import os
 import googleapiclient.discovery
 
-def search_for_video(search_query):
+def search_for_video(search_query, date):
 	# Disable OAuthlib's HTTPS verification when running locally.
 	# *DO NOT* leave this option enabled in production.
 	os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -16,7 +16,7 @@ def search_for_video(search_query):
 
 	search = youtube.search().list(
 		part="snippet",
-		maxResults=25,
+		maxResults=1,
 		q=search_query
 	)
 
