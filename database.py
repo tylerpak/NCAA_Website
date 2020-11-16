@@ -11,7 +11,6 @@ teamCollection = db['Teams']
 playerCollection = db['Players']
 gameCollection = db['Games']
 newsCollection = db['News']
-# autocompleteCollection = db['Autocomplete']
 
 '''
 Populates the online mongoDB database
@@ -235,6 +234,8 @@ def autocomplete(model):
                 matches.append(p['name'])
             if p['team'] not in matches:
                 matches.append(p['team'])
+            if p['position'] not in matches:
+                matches.append(p['position'])
 
     if re.match('game', model) or re.match('all', model):
         for g in gameCollection.find():

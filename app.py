@@ -20,7 +20,10 @@ def index():
         else:
             return search(input, False, False, True)
     else:
-        return render_template('index.html')
+        team_list = database.autocomplete('team')
+        player_list = database.autocomplete('player')
+        game_list = database.autocomplete('game')
+        return render_template('index.html', team_list=team_list, player_list=player_list, game_list=game_list)
 
 
 @app.route('/about')

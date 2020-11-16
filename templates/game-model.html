@@ -49,6 +49,19 @@
 }
 
 </style>
+
+<script>
+  function find_related(input){
+    var text_input = document.getElementById('content');
+    alert("hi")
+    if (input == ""){
+      text_input.setAttribute('list', 'empty');
+    }
+    else{
+      text_input.setAttribute('list', 'datalist');
+    }
+  }
+</script>
 {% endblock %}
 {% block body %}
 <h1>Games:</h1>
@@ -56,13 +69,14 @@
 <p>Showing all games we currently have information on</p>
 <div class="form">
     <form action="/games1" method="POST" autocomplete="off">
-        <input type="text" name="content" id="content" placeholder="Search by teams, date, venue.." list="datalist">
+        <input type="text" name="content" id="content" placeholder="Search by teams, date, venue.." list="empty" onkeyup="find_related(value)">
         <input type="submit" value="Search">
         <datalist id="datalist">
-          {% for option in word_list %}
-            <option value="{{option}}"></option>
-          {% endfor %}
+            {% for option in word_list %}
+              <option value="{{option}}"></option>
+            {% endfor %}
         </datalist>
+        <datalist id="empty"></datalist>
     </form>
 </div>
 
