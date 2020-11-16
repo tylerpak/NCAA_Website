@@ -69,6 +69,7 @@ class Game()
 		-links (dict: "textDescription": "url"))
 		-thumbnail (str)
 		-highlights (str)
+		-youtube_highlights (str)
 
 class News()
 	Attributes:

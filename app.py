@@ -8,9 +8,19 @@ import database
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        input = request.form['content']
+        select = request.form['filter']
+        if select == "players":
+            return search(input, False, True, False)
+        if select == "teams":
+            return search(input, True, False, False)
+        else:
+            return search(input, False, False, True)
+    else:
+        return render_template('index.html')
 
 
 @app.route('/about')

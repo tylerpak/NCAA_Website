@@ -19,3 +19,30 @@ h2{
 .carousel{
     padding-bottom: 50px;
 }
+
+.form .search-container {
+  float: left;
+}
+
+.form input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  width: 50%;
+  border: 1px solid grey;
+}
+
+.form .search-container button {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+
+.form .search-container button:hover {
+  background: #ccc;
+}
