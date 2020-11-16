@@ -3,15 +3,49 @@
 
 {% block head %}
 <link rel="stylesheet" href="static/style/index.css">
+
+<script>
+  function changelist(){
+    var filter = document.getElementById('filter').value;
+    var text_input = document.getElementById('content');
+    if (text_input.value == ""){
+      text_input.setAttribute('list', null);
+    }
+    else if (filter == "players"){
+      text_input.setAttribute('list', 'player-list');
+    }
+    else if (filter == "teams"){
+      text_input.setAttribute('list', 'team-list');
+    }
+    else if (filter == "games"){
+      text_input.setAttribute('list', 'game-list');
+    }
+  }
+</script>
 {% endblock %}
 
 
 {% block body %}
 <h1>Home</h1>
 <div class="form">
-  <form action="/" method="POST" id="search">
-      <input type="text" name="content" id="content" placeholder="Search">
-      <select name="filter" id="filter">
+  <form action="/" method="POST" id="search" autocomplete="off">
+      <input type="text" name="content" id="content" placeholder="Search" onkeypress="changelist()">
+      <datalist id="player-list">
+        {% for option in player_list %}
+          <option value="{{option}}"></option>
+        {% endfor %}
+      </datalist>
+      <datalist id="team-list">
+        {% for option in team_list %}
+          <option value="{{option}}"></option>
+        {% endfor %}
+      </datalist>
+      <datalist id="game-list">
+        {% for option in game_list %}
+          <option value="{{option}}"></option>
+        {% endfor %}
+      </datalist>
+      <select name="filter" id="filter" onclick="changelist()">
           <option value="players">Players</option>
           <option value="teams">Teams</option>
           <option value="games">Games</option>
