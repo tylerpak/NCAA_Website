@@ -84,7 +84,13 @@
     <div class="col-3" style="background-color:white;">
         <a href="team-instance{{ column['_id']}}" id="reference"><img src="{{ column['logo'] }}" alt="logo" style="width:80px;"></a>
         <h4>{{ column['name'] }}</h4>
-        <!-- <h6>RECORD: {{ column['record'] }}</h6> -->
+        <h6>FEATURED PLAYER: {{ column['roster'][0][0] }}</h6>
+        {% set game = column['schedule']|last %}
+        {% if  game_exists(game)   %}
+            <h6>Last Played: {{ column['schedule'][game][0] }}</h6>
+        {% else %}
+
+        {% endif %}
     </div>
     {% endfor %}
    <br>
