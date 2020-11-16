@@ -53,9 +53,14 @@
 
 <p>Showing all teams we currently have information on</p>
 <div class="form">
-        <form action="/teams1" method="POST">
-            <input type="text" name="content" id="content" placeholder="Search for team by name or player..">
+        <form action="/teams1" method="POST" autocomplete="off">
+            <input type="text" name="content" id="content" placeholder="Search for team by name or player.." list="datalist">
             <input type="submit" value="Search">
+            <datalist id="datalist">
+              {% for option in word_list %}
+                <option value="{{option}}"></option>
+              {% endfor %}
+          </datalist>
         </form>
     </div>
 

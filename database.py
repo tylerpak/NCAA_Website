@@ -11,7 +11,7 @@ teamCollection = db['Teams']
 playerCollection = db['Players']
 gameCollection = db['Games']
 newsCollection = db['News']
-
+# autocompleteCollection = db['Autocomplete']
 
 '''
 Populates the online mongoDB database
@@ -130,7 +130,6 @@ Finds all news that contains the keyword in the headline or description
 '''
 def getRelatedNews(keyword):
     newsList = []
-
     splitWords = keyword.split()
 
     for n in newsCollection.find():
@@ -156,10 +155,7 @@ def getAllTeams(page_number):
 Returns number of pages necessary for teams 
 '''
 def getAllTeamsPgCount():
-    x = 0
-    for t in teamCollection.find():
-        x = x + 1
-    return x/24
+    return teamCollection.count() / 24
 
 
 '''
@@ -175,10 +171,7 @@ def getAllPlayers(page_number):
 Returns number of pages necessary for players 
 '''
 def getAllPlayersPgCount():
-    x = 0
-    for p in playerCollection.find():
-        x = x + 1
-    return x/24
+    return playerCollection.count() / 24
 
 '''
 Returns a list of all Games dictionaries in database
@@ -193,10 +186,7 @@ def getAllGames(page_number):
 Returns number of pages necessary for teams 
 '''
 def getAllGamesPgCount():
-    x = 0
-    for g in gameCollection.find():
-        x = x + 1
-    return x/24
+    return gameCollection.count() / 24
 
 
 '''
@@ -227,6 +217,38 @@ def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = T
                     matches.append(g)
                     break
     return matches[:24]
+
+'''
+Gets all words related to the model (team, player, games, or all) for autocomplete
+'''
+def autocomplete(model):
+    matches = []
+    if re.match('team', model) or re.match('all', model):
+        for t in teamCollection.find():
+            matches.append(t['name'])
+            for player in t['roster'][1]:
+                matches.append(player)
+
+    if re.match('player', model) or re.match('all', model):
+        for p in playerCollection.find():
+            if p['name'] not in matches:
+                matches.append(p['name'])
+            if p['team'] not in matches:
+                matches.append(p['team'])
+
+    if re.match('game', model) or re.match('all', model):
+        for g in gameCollection.find():
+            if g['name'] not in matches:
+                matches.append(g['name'])
+            if g['home_name'] not in matches:
+                matches.append(g['home_name'])
+            if g['away_name'] not in matches:
+                matches.append(g['away_name'])
+            if g['venue'] not in matches:
+                matches.append(g['venue'])
+
+    matches.sort()
+    return matches
 
 
 '''
