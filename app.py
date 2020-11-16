@@ -20,7 +20,10 @@ def index():
         else:
             return search(input, False, False, True)
     else:
-        return render_template('index.html')
+        team_list = database.autocomplete('team')
+        player_list = database.autocomplete('player')
+        game_list = database.autocomplete('game')
+        return render_template('index.html', team_list=team_list, player_list=player_list, game_list=game_list)
 
 
 @app.route('/about')
@@ -37,7 +40,8 @@ def players(page_number):
         players = database.getAllPlayers(int(page_number))
         pages = database.getAllPlayersPgCount()
         cur_page = int(page_number)
-        return render_template('player-model.html', players=players, pages = pages, cur_page = cur_page)
+        query_list = database.autocomplete('player')
+        return render_template('player-model.html', players=players, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
 @app.route('/teams<page_number>', methods=['POST', 'GET'])
@@ -49,7 +53,8 @@ def teams(page_number):
         teams = database.getAllTeams(int(page_number))
         pages = database.getAllTeamsPgCount()
         cur_page = int(page_number)
-        return render_template('team-model.html', teams=teams, pages = pages, cur_page = cur_page)
+        query_list = database.autocomplete('team')
+        return render_template('team-model.html', teams=teams, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
 @app.route('/games<page_number>', methods=['POST', 'GET'])
@@ -61,7 +66,8 @@ def games(page_number):
         games = database.getAllGames(int(page_number))
         pages = database.getAllGamesPgCount()
         cur_page = int(page_number)
-        return render_template('game-model.html', games=games, pages = pages, cur_page = cur_page)
+        query_list = database.autocomplete('game')
+        return render_template('game-model.html', games=games, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
 @app.route('/player-instance<id>')
@@ -103,11 +109,14 @@ def search(search, team, player, game):
         if len(results) != 0:
             pages = len(results)/24
         if player == True:
-            return render_template('player-model.html', players=results, pages = pages, cur_page = 1)
+            query_list = database.autocomplete('player')
+            return render_template('player-model.html', players=results, pages = pages, cur_page = 1, word_list=query_list)
         if team == True:
-            return render_template('team-model.html', teams=results, pages=pages, cur_page=1)
+            query_list = database.autocomplete('team')
+            return render_template('team-model.html', teams=results, pages=pages, cur_page=1, word_list=query_list)
         if game == True:
-            return render_template('game-model.html', games=results, pages=pages, cur_page=1)
+            query_list = database.autocomplete('game')
+            return render_template('game-model.html', games=results, pages=pages, cur_page=1, word_list=query_list)
 
 
 
@@ -130,8 +139,6 @@ def utility_processor3():
     def player_exists(id):
         return database.getPlayer(id)
     return dict(player_exists=player_exists)
-
-
 
 
 
