@@ -1,3 +1,5 @@
+import string
+
 from ncaam_bb_api import Player, Team, Game, News
 from pymongo import MongoClient
 from pprint import pprint
@@ -209,21 +211,21 @@ def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = T
     if searchTeam:
         for t in teamCollection.find():
             for value in t.values():
-                if re.search(query, str(value)):
+                if re.search(query.lower(), str(value).lower()):
                     matches.append(t)
                     break
     
     if searchPlayer:
         for p in playerCollection.find():
             for value in p.values():
-                if re.search(query, str(value)):
+                if re.search(query.lower(), str(value).lower()):
                     matches.append(p)
                     break
     
     if searchGame:
         for g in gameCollection.find():
             for value in g.values():
-                if re.search(query, str(value)):
+                if re.search(query.lower(), str(value).lower()):
                     matches.append(g)
                     break
     return matches[:24]
