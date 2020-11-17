@@ -143,4 +143,7 @@ def utility_processor3():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # print('start update')
+    database.updateDB()
+    # print('done')
+    # app.run(debug=True)

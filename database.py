@@ -4,6 +4,7 @@ from ncaam_bb_api import Player, Team, Game, News
 from pymongo import MongoClient
 from pprint import pprint
 import re
+import youtube_search
 
 # Read only access to database, no writing allowed
 # Loads online database and its collections
@@ -274,6 +275,15 @@ Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
+    for g in gameCollection.find({'video': '---'}):
+        year = g['date'][:4]
+        query = "basketball {} highlights {}\n".format(g['name'], year)
+        url = youtube_search.search_for_video(query)
+        gameData = {
+            "video": url
+        }
+        gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
     return 0
     # terms = autocomplete('team')
     # autocompleteCollection.insert({'_id': 'team', 'related_terms': terms})

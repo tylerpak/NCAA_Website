@@ -23,7 +23,10 @@ def search_for_video(search_query):
 	)
 
 	query = search.execute()
-	highlight_id = query["items"][0]["id"]["videoId"]
 
-	url  = "https://www.youtube.com/watch?v=" + str(highlight_id)
-	return url
+	try:
+		highlight_id = query["items"][0]["id"]["videoId"]
+		url  = "https://www.youtube.com/watch?v=" + str(highlight_id)
+		return url
+	except:
+		return "---"
