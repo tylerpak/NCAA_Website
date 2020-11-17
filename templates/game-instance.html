@@ -25,18 +25,49 @@ h4 {
 p {
     text-align: center;
 }
+
+ul.no-bullets {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+  max-height:300px;
+  overflow:auto;
+  display: block;
+}
+
+ul li.roster{
+    font-size: 20px;
+}
+
+.info {
+  text-align: center;
+  }
+
+.info .row {
+  border-bottom: 1px dashed black;
+}
+
+.info .row .h4 {
+  text-align: center;
+}
+
 </style>
 {% endblock %}
 {% block body %}
 <h1>{{game['home_name'] ~ ' vs ' ~ game['away_name']}}</h1>
 <br>
+<div class="row">
+    <img src="{{ game['thumbnail'] }}" alt="Thumbnail" width="100%">
+</div>
 <div class="row align-items-center">
     <div class="column">
         <a href="team-instance{{ home['_id'] }}" id="home"><img src="{{ home['logo'] }}" alt="Home Logo" width="100%"></a>
         <h3>{{game['home_name']}}</h3>
     </div>
     <div class="column">
-        <h1 style="border:none">VS</h1>
+        <div class="container info">
+            <h1>VS</h1>
+        </div>
     </div>
     <div class="column">
         <a href="team-instance{{ away['_id'] }}" id="away"><img src="{{ away['logo'] }}" alt="Away Logo" width="100%"></a>
@@ -47,35 +78,40 @@ p {
 <div class="row">
     <div class="column">
         <h4>Roster:</h4>
+        <ul class="no-bullets">
         {% for player in home['roster'][0] %}
-        {% if  player_exists(home['roster'][1][loop.index-1])   %}
-        <h4><a href="player-instance{{ home['roster'][1][loop.index-1] }}" id="player" name ="{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
-        {% else %}  
-        <h4>{{ player }} </h4>
-        {% endif %}
+            {% if  player_exists(home['roster'][1][loop.index-1])   %}
+            <li class = "roster"><a href="player-instance{{ home['roster'][1][loop.index-1] }}" id="player" name ="{{ home['roster'][1][loop.index-1] }}">{{ player }}</a></li>
+            {% else %}
+            <li class = "roster">{{ player }} </li>
+            {% endif %}
         {% endfor %}
+        </ul>
     </div>
     <div class="column">
-        <h4>DATE</h4>
-        <h4>{{ game['date'][4:6] }}-{{ game['date'][6:8] }}-{{ game['date'][0:4] }}</h4>
-        <br>
-        <h4>VENUE</h4>
-        <h4>{{ game['venue'] }}</h4>
-        <br>
-        <h4>SCORE</h4>
-        <h4>{{ game['score'] }}</h4>
-        <br>
-        <img src="{{ game['thumbnail'] }}" alt="Thumbnail" width="200">
+        <div class="container info">
+            <div class="row">
+                <h4>Date: {{ game['date'][4:6] }}-{{ game['date'][6:8] }}-{{ game['date'][0:4] }}</h4>
+            </div>
+            <div class="row">
+                <h4>Venue: {{ game['venue'] }}</h4>
+            </div>
+            <div class="row">
+                <h4>Score: {{ game['score'] }}</h4>
+            </div>
+        </div>
     </div>
     <div class="column">
         <h4>Roster:</h4>
+       <ul class="no-bullets">
         {% for player in away['roster'][0] %}
-        {% if  player_exists(away['roster'][1][loop.index-1])   %}
-        <h4><a href="player-instance{{ away['roster'][1][loop.index-1] }}" id="player" name ="{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></h4>
-        {% else %}  
-        <h4>{{ player }} </h4>
-        {% endif %}
+            {% if  player_exists(away['roster'][1][loop.index-1])   %}
+            <li class = "roster"><a href="player-instance{{ away['roster'][1][loop.index-1] }}" id="player1" name ="{{ away['roster'][1][loop.index-1] }}">{{ player }}</a></li>
+            {% else %}
+            <li class = "roster">{{ player }} </li>
+            {% endif %}
         {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}
