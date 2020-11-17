@@ -246,9 +246,10 @@ class Game:
 			for x in response["events"]:
 				if x["id"] == self.game_id:
 					game = x
-			
 			self.home_id = game["competitions"][0]["competitors"][0]["id"]
+			self.home_logo = game["competitions"][0]["competitors"][0]["team"]["logo"]
 			self.away_id = game["competitions"][0]["competitors"][1]["id"]
+			self.away_logo = game["competitions"][0]["competitors"][1]["team"]["logo"]
 			self.home_name = game["competitions"][0]["competitors"][0]["team"]["displayName"]
 			self.away_name = game["competitions"][0]["competitors"][1]["team"]["displayName"]
 			#self.date = game["date"]
@@ -274,9 +275,7 @@ class Game:
 			self.short_home_name = game["competitions"][0]["competitors"][0]["team"]["shortDisplayName"]
 			self.short_away_name = game["competitions"][0]["competitors"][1]["team"]["shortDisplayName"]
 			query = self.home_name + " vs " + self.away_name + " Basketball " + date
-
 			self.youtube_highlights = youtube_search.search_for_video(query)
-
 		except:
 			self.youtube_highlights = None
 

@@ -275,16 +275,41 @@ Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
-    for g in gameCollection.find({'video': '---'}):
-        year = g['date'][:4]
-        query = "basketball {} highlights {}\n".format(g['name'], year)
-        url = youtube_search.search_for_video(query)
-        gameData = {
-            "video": url
-        }
-        gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
-
     return 0
+
+    # for g in gameCollection.find():
+    #     try:
+    #         thing = g['home_logo']
+    #         thing = g['away_logo']
+    #     except:
+    #         home_team = getTeam(g['home_id'])
+    #         away_team = getTeam(g['away_id'])
+
+    #         if home_team is None:
+    #             home_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+    #         else:
+    #             home_logo = home_team['logo']
+
+    #         if away_team is None:
+    #             away_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+    #         else:
+    #             away_logo = away_team['logo']
+
+    #         gameData = {
+    #             "home_logo": home_logo,
+    #             "away_logo": away_logo
+    #         }
+    #         gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
+    # for g in gameCollection.find({'video': '---'}):
+    #     year = g['date'][:4]
+    #     query = "basketball {} highlights {}\n".format(g['name'], year)
+    #     url = youtube_search.search_for_video(query)
+    #     gameData = {
+    #         "video": url
+    #     }
+    #     gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
     # terms = autocomplete('team')
     # autocompleteCollection.insert({'_id': 'team', 'related_terms': terms})
     # print('done teams')
