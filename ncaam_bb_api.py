@@ -337,6 +337,7 @@ class News():
 						"headline": x["headline"],
 						"description": x["description"],
 						"images": images,
+						"link": x["links"]["web"]["href"]
 					}
 				except:
 					temp = {
