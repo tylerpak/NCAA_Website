@@ -55,9 +55,16 @@
 
 <p>Showing all teams we currently have information on</p>
 <div class="form">
-    <form action="/teams1" method="POST" autocomplete="off">
+    <form action="/teams-1-{{sr}}-{{query}}-{{filter}}" method="POST" autocomplete="off">
         <input type="text" name="content" id="content" placeholder="Search for team by name or player.." onkeyup="find_related(value)" list="empty">
-        <input type="submit" value="Search">
+        <input type="submit" value="Apply">
+        <br>
+        <label for="sort">Sort:</label>
+        <select name="sort" id="sort"  onclick="changelist()">
+              <option value="1">None</option>
+              <option value="2">Team A-Z</option>
+              <option value="3">Team Z-A</option>
+        </select>
         <datalist id="datalist">
           {% for option in word_list %}
             <option value="{{option}}"></option>
@@ -90,21 +97,21 @@
 
 <div class="pagination">
   {% if cur_page > 1 %}
-  <a href="teams{{ cur_page - 1 }}">&laquo;</a>
+  <a href="teams-{{ cur_page - 1 }}-{{ sr }}-{{query}}-{{filter}}">&laquo;</a>
     {% if cur_page > 2 %}
-    <a href="teams{{ cur_page - 2 }}">{{ cur_page - 2 }}</a>
+    <a href="teams-{{ cur_page - 2 }}-{{ sr }}-{{query}}-{{filter}}">{{ cur_page - 2 }}</a>
     {% endif %}
-  <a href="teams{{ cur_page - 1 }}">{{ cur_page - 1 }}</a>
+  <a href="teams-{{ cur_page - 1 }}-{{ sr }}-{{query}}-{{filter}}">{{ cur_page - 1 }}</a>
     {% endif %}
-  <a class="active" href="teams{{ cur_page }}">{{ cur_page }}</a>
+  <a class="active" href="teams-{{ cur_page }}-{{ sr }}-{{query}}-{{filter}}">{{ cur_page }}</a>
     {% if cur_page < pages %}
     {% if cur_page < pages-1 %}
-    <a href="teams{{ cur_page + 1 }}">{{ cur_page + 1 }}</a>
+    <a href="teams-{{ cur_page + 1 }}-{{ sr }}-{{query}}-{{filter}}">{{ cur_page + 1 }}</a>
     {% endif %}
     {% if cur_page < pages-2 %}
-    <a href="teams{{ cur_page + 2 }}">{{ cur_page + 2 }}</a>
+    <a href="teams-{{ cur_page + 2 }}-{{ sr }}-{{query}}-{{filter}}">{{ cur_page + 2 }}</a>
     {% endif %}
-  <a href="teams{{ cur_page + 1 }}">&raquo;</a>
+  <a href="teams-{{ cur_page + 1 }}-{{ sr }}-{{query}}-{{filter}}">&raquo;</a>
     {% endif %}
 </div>
 
