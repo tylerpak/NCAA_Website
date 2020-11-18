@@ -49,15 +49,35 @@
 </style>
 
 <script src="/static/script/autocomplete.js"></script>
+<script>
+
+</script>
 {% endblock %}
 {% block body %}
 <h1>Players:</h1>
-
 <p>Showing all players we currently have information on</p>
 <div class="form">
-    <form action="/players1" method="POST" autocomplete="off">
+    <form action="/players-1-{{sr}}-{{query}}-{{filter}}" method="POST" autocomplete="off" onsubmit="search()">
         <input type="text" name="content" id="content" placeholder="Search for player by name, position, team.." onkeyup="find_related(value)" list="empty">
-        <input type="submit" value="Search">
+        <input type="submit" value="Apply">
+        <br>
+        <label for="filter">Filter by position:</label>
+        <select name="filter" id="filter"  onclick="changelist()">
+              <option value="none">None</option>
+              <option value="forward">Forward</option>
+              <option value="guard">Guard</option>
+              <option value="center">Center</option>
+        </select>
+        <label for="sort">Sort:</label>
+        <select name="sort" id="sort"  onclick="changelist()">
+              <option value="1">None</option>
+              <option value="2">First Name A-Z</option>
+              <option value="3">First Name Z-A</option>
+              <option value="7">Team A-Z</option>
+              <option value="4">Team Z-A</option>
+              <option value="5">Weight(ascending)</option>
+              <option value="6">Weight(descending)</option>
+        </select>
         <datalist id="datalist">
           {% for option in word_list %}
             <option value="{{option}}"></option>
@@ -65,6 +85,7 @@
         </datalist>
         <datalist id="empty"></datalist>
     </form>
+
 </div>
 
 {% for row in players | batch(4) %}
@@ -84,21 +105,21 @@
 
 <div class="pagination">
   {% if cur_page > 1 %}
-  <a href="players{{ cur_page - 1 }}">&laquo;</a>
+  <a href="players-{{ cur_page - 1 }}-{{sr}}-{{ query}}-{{filter}}">&laquo;</a>
     {% if cur_page > 2 %}
-    <a href="players{{ cur_page - 2 }}">{{ cur_page - 2 }}</a>
+    <a href="players-{{ cur_page - 2 }}-{{sr}}-{{ query}}-{{filter}}">{{ cur_page - 2 }}</a>
     {% endif %}
-  <a href="players{{ cur_page - 1 }}">{{ cur_page - 1 }}</a>
+  <a href="players-{{ cur_page - 1 }}-{{sr}}-{{ query}}-{{filter}}">{{ cur_page - 1 }}</a>
     {% endif %}
-  <a class="active" href="players{{ cur_page }}">{{ cur_page }}</a>
+  <a class="active" href="players-{{ cur_page }}-{{sr}}-{{ query}}-{{filter}}">{{ cur_page }}</a>
     {% if cur_page < pages %}
     {% if cur_page < pages-1 %}
-    <a href="players{{ cur_page + 1 }}">{{ cur_page + 1 }}</a>
+    <a href="players-{{ cur_page + 1 }}-{{sr}}-{{ query}}-{{filter}}">{{ cur_page + 1 }}</a>
     {% endif %}
     {% if cur_page < pages-2 %}
-    <a href="players{{ cur_page + 2 }}">{{ cur_page + 2 }}</a>
+    <a href="players-{{ cur_page + 2 }}-{{sr}}-{{ query}}-{{filter}}">{{ cur_page + 2 }}</a>
     {% endif %}
-  <a href="players{{ cur_page + 1 }}">&raquo;</a>
+  <a href="players-{{ cur_page + 1 }}-{{sr}}-{{ query}}-{{filter}}">&raquo;</a>
     {% endif %}
 </div>
 
