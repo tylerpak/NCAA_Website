@@ -4,6 +4,7 @@ from ncaam_bb_api import Player, Team, Game, News
 from pymongo import MongoClient
 from pprint import pprint
 import re
+import youtube_search
 
 # Read only access to database, no writing allowed
 # Loads online database and its collections
@@ -13,6 +14,7 @@ teamCollection = db['Teams']
 playerCollection = db['Players']
 gameCollection = db['Games']
 newsCollection = db['News']
+autocompleteCollection = db['Autocomplete']
 
 '''
 Populates the online mongoDB database
@@ -220,17 +222,18 @@ def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = T
     return matches[:24]
 
 '''
-Gets all words related to the model (team, player, games, or all) for autocomplete
+Gets all words related to the model (team, player, or games) for autocomplete
+Used to store in database, don't use in app.py (look at getRelatedTerms())
 '''
 def autocomplete(model):
     matches = []
-    if re.match('team', model) or re.match('all', model):
+    if re.match('team', model):
         for t in teamCollection.find():
             matches.append(t['name'])
             for player in t['roster'][0]:
                 matches.append(player)
 
-    if re.match('player', model) or re.match('all', model):
+    if re.match('player', model):
         for p in playerCollection.find():
             if p['name'] not in matches:
                 matches.append(p['name'])
@@ -239,7 +242,7 @@ def autocomplete(model):
             if p['position'] not in matches:
                 matches.append(p['position'])
 
-    if re.match('game', model) or re.match('all', model):
+    if re.match('game', model):
         for g in gameCollection.find():
             if g['name'] not in matches:
                 matches.append(g['name'])
@@ -255,11 +258,67 @@ def autocomplete(model):
 
 
 '''
+Gets all the related terms to model (team, player, game) from the database
+Returns an empty list if model is not found
+'''
+def getRelatedTerms(model):
+    matches = []
+
+    for related in autocompleteCollection.find({'_id': model}):
+        return related['related_terms']
+
+    return matches
+
+
+'''
 Updates the database with new fields, or new values to exisiting fields
 Online database is up to date and read only, so don't call this method
 '''
 def updateDB():
     return 0
+
+    # for g in gameCollection.find():
+    #     try:
+    #         thing = g['home_logo']
+    #         thing = g['away_logo']
+    #     except:
+    #         home_team = getTeam(g['home_id'])
+    #         away_team = getTeam(g['away_id'])
+
+    #         if home_team is None:
+    #             home_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+    #         else:
+    #             home_logo = home_team['logo']
+
+    #         if away_team is None:
+    #             away_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
+    #         else:
+    #             away_logo = away_team['logo']
+
+    #         gameData = {
+    #             "home_logo": home_logo,
+    #             "away_logo": away_logo
+    #         }
+    #         gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
+    # for g in gameCollection.find({'video': '---'}):
+    #     year = g['date'][:4]
+    #     query = "basketball {} highlights {}\n".format(g['name'], year)
+    #     url = youtube_search.search_for_video(query)
+    #     gameData = {
+    #         "video": url
+    #     }
+    #     gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
+
+    # terms = autocomplete('team')
+    # autocompleteCollection.insert({'_id': 'team', 'related_terms': terms})
+    # print('done teams')
+    # terms = autocomplete('player')
+    # autocompleteCollection.insert({'_id': 'player', 'related_terms': terms})
+    # print('done player')
+    # terms = autocomplete('games')
+    # autocompleteCollection.insert({'_id': 'game', 'related_terms': terms})
+
     # news = News()
 
     # for a in news.articles:

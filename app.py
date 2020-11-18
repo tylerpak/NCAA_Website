@@ -41,7 +41,7 @@ def players(page_number):
         players = database.getAllPlayers(int(page_number))
         pages = database.getAllPlayersPgCount()
         cur_page = int(page_number)
-        query_list = database.autocomplete('player')
+        query_list = database.getRelatedTerms('player')
         return render_template('player-model.html', players=players, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
@@ -54,7 +54,7 @@ def teams(page_number):
         teams = database.getAllTeams(int(page_number))
         pages = database.getAllTeamsPgCount()
         cur_page = int(page_number)
-        query_list = database.autocomplete('team')
+        query_list = database.getRelatedTerms('team')
         return render_template('team-model.html', teams=teams, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
@@ -67,7 +67,7 @@ def games(page_number):
         games = database.getAllGames(int(page_number))
         pages = database.getAllGamesPgCount()
         cur_page = int(page_number)
-        query_list = database.autocomplete('game')
+        query_list = database.getRelatedTerms('game')
         return render_template('game-model.html', games=games, pages = pages, cur_page = cur_page, word_list=query_list)
 
 
@@ -110,13 +110,13 @@ def search(search, team, player, game):
         if len(results) != 0:
             pages = len(results)/24
         if player == True:
-            query_list = database.autocomplete('player')
+            query_list = database.getRelatedTerms('player')
             return render_template('player-model.html', players=results, pages = pages, cur_page = 1, word_list=query_list)
         if team == True:
-            query_list = database.autocomplete('team')
+            query_list = database.getRelatedTerms('team')
             return render_template('team-model.html', teams=results, pages=pages, cur_page=1, word_list=query_list)
         if game == True:
-            query_list = database.autocomplete('game')
+            query_list = database.getRelatedTerms('game')
             return render_template('game-model.html', games=results, pages=pages, cur_page=1, word_list=query_list)
 
 

@@ -48,17 +48,7 @@
 
 </style>
 
-<script>
-  function find_related(input){
-    var text_input = document.getElementById('content');
-    if (input == ""){
-      text_input.setAttribute('list', null);
-    }
-    else{
-      text_input.setAttribute('list', 'datalist');
-    }
-  }
-</script>
+<script src="/static/script/autocomplete.js"></script>
 {% endblock %}
 {% block body %}
 <h1>Players:</h1>
