@@ -193,6 +193,17 @@ def getAllGamesPgCount():
 
 
 '''
+Get all news articles in database
+'''
+def getAllNews():
+    articles = []
+    for a in newsCollection.find():
+        articles.append(a)
+    
+    return articles
+
+
+'''
 Returns a list of all entries in the database that contains the query
 Default search goes through all collections in database
 '''
@@ -277,6 +288,17 @@ Online database is up to date and read only, so don't call this method
 def updateDB():
     return 0
 
+    # news = News()
+
+    # for a in news.articles:
+    #     newsData = {
+    #         'headline': a['headline'],
+    #         'description': a['description'],
+    #         'images': a['images'],
+    #         'link': a['link']
+    #     }
+    #     newsCollection.insert(newsData)
+
     # for g in gameCollection.find():
     #     try:
     #         thing = g['home_logo']
@@ -318,16 +340,6 @@ def updateDB():
     # print('done player')
     # terms = autocomplete('games')
     # autocompleteCollection.insert({'_id': 'game', 'related_terms': terms})
-
-    # news = News()
-
-    # for a in news.articles:
-    #     newsData = {
-    #         'headline': a['headline'],
-    #         'description': a['description'],
-    #         'images': a['images']
-    #     }
-    #     newsCollection.insert(newsData)
 
     # for t in teamCollection.find():
     #     team = Team(t['_id'])
