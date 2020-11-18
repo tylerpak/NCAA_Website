@@ -79,4 +79,5 @@ class News()
 			-headline (str)
 			-description (str)
 			-images (list str)
+			-link (str)
 		}
