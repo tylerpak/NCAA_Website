@@ -56,11 +56,12 @@ ul li.roster{
 {% endblock %}
 {% block body %}
 <h1>{{game['home_name'] ~ ' vs ' ~ game['away_name']}}</h1>
+<h1>{{game['youtube_highlights']}}</h1>
 <br>
 <div class="row">
-    {% if not game['thumbnail'] == "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png" %}
-    <img src="{{ game['thumbnail'] }}" alt="Thumbnail" width="100%">
-    {% endif %}
+    {% set video = game['video'] %}
+    <iframe width="100%" height="500"  src="https://www.youtube.com/embed/{{video[32:]}}">
+    </iframe>
 </div>
 <div class="row align-items-center">
     <div class="column">

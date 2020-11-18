@@ -202,12 +202,64 @@ def getAllNews():
     
     return articles
 
+'''
+Sort player results
+'''
+def sortPlayers(sort, players):
+    if sort == 2:
+        players.sort(key=lambda x: x['name'])
+    elif sort == 3:
+        players.sort(key=lambda x: x['name'], reverse=True)
+    elif sort == 4:
+        players.reverse()
+    elif sort == 5:
+        players.sort(key=lambda x: x['weight'])
+    elif sort == 6:
+        players.sort(key=lambda x: x['weight'], reverse=True)
+    else:
+        return players
+    return players
+
+
+'''
+Sort team results
+'''
+def sortTeams(sort, teams):
+    if sort == 2:
+        teams.sort(key=lambda x: x['name'])
+    elif sort == 3:
+        teams.sort(key=lambda x: x['name'], reverse=True)
+    else:
+        return teams
+    return teams
+
+
+'''
+Sort game results
+'''
+def sortGames(sort, games):
+    if sort == 2:
+        games.sort(key=lambda x: x['home_name'])
+    elif sort == 3:
+        games.sort(key=lambda x: x['home_name'], reverse=True)
+    elif sort == 4:
+        games.sort(key=lambda x: x['away_name'])
+    elif sort == 5:
+        games.sort(key=lambda x: x['away_name'], reverse=True)
+    elif sort == 6:
+        games.sort(key=lambda x: x['venue'])
+    elif sort ==7:
+        games.sort(key=lambda x: x['venue'], reverse=True)
+    else:
+        return games
+    return games
+
 
 '''
 Returns a list of all entries in the database that contains the query
 Default search goes through all collections in database
 '''
-def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = True):
+def searchDatabase(query, filter, page_number, sort, searchTeam = True, searchPlayer = True, searchGame = True,):
     matches = []
 
     if searchTeam:
@@ -219,18 +271,38 @@ def searchDatabase(query, searchTeam = True, searchPlayer = True, searchGame = T
     
     if searchPlayer:
         for p in playerCollection.find():
+            flag1 = False
+            if filter == "none":
+                flag2 = True
+            else:
+                flag2 = False
             for value in p.values():
+                if re.search(filter, str(value).lower()):
+                    flag2 = True
                 if re.search(query.lower(), str(value).lower()):
+                    flag1 = True
+                if flag1 and flag2 is True:
                     matches.append(p)
                     break
-    
+
     if searchGame:
         for g in gameCollection.find():
             for value in g.values():
                 if re.search(query.lower(), str(value).lower()):
                     matches.append(g)
                     break
-    return matches[:24]
+
+    if searchPlayer:
+        matches = sortPlayers(sort, matches)
+    if searchTeam:
+        matches = sortTeams(sort, matches)
+    if searchGame:
+        matches = sortGames(sort, matches)
+
+    output = matches[(24*(page_number-1)):]
+    output = output[:24]
+    output.append(len(matches))
+    return output
 
 '''
 Gets all words related to the model (team, player, or games) for autocomplete

@@ -54,6 +54,27 @@ ul li.roster{
 .schedule .row{
     border-bottom: 1px dashed black;
 }
+.carousel-item img {
+    width: 100%;
+    height: 400px;
+}
+
+.carousel-inner{
+    text-align: center;
+    background-color: white;
+    border: 1px solid black;
+}
+
+h2{
+    border-bottom: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.carousel{
+    padding-bottom: 50px;
+}
+
 
 </style>
 {% endblock %}
@@ -75,6 +96,30 @@ ul li.roster{
         {% endfor %}
         </ul>
     </div>
+</div>
+<div id="team-car" class="carousel slide" data-ride="carousel">
+    <!-- The slideshow -->
+    <div class="carousel-inner">
+        {% for news in news_list %}
+         <div class="carousel-item {% if loop.index == 1 %} active {% endif %}">
+             <a href="{{ news['link'] }}">
+             <h4 style="color:black; padding-top:10px;">{{ news['headline'] }}<br></h4>
+             <img src="{{ news['images'][0] }}" alt="image">
+             </a>
+             <div class="carousel-caption d-none d-md-block bg-dark">
+                 <p>{{ news['description'] }}</p>
+             </div>
+         </div>
+        {% endfor %}
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="carousel-control-prev" href="#team-car" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#team-car" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </a>
 </div>
 <div class="container schedule">
     <h2 style="text-align: left;">Schedule</h2>
