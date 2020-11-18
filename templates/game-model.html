@@ -73,7 +73,12 @@
 <div class="row">
     {% for column in row %}
     <div class="col-3" style="background-color:white;">
-        <a href="game-instance{{ column['_id'] }}" id="reference"><img src="{{ column['thumbnail'] }}" alt="Thumbnail" style="width:80px;"></a>
+      <div class="row">
+        <div class="col">
+          <a href="game-instance{{ column['_id'] }}" id="reference"><img src="{{ column['away_logo'] }}" alt="Thumbnail" style="width:80px;"></a>
+          <a href="game-instance{{ column['_id'] }}" id="reference"><img src="{{ column['home_logo'] }}" alt="Thumbnail" style="width:80px;"></a>
+        </div>
+      </div>
         <h4>{{ column['name'] }}</h4>
         <h6>Venue: {{ column['venue'] }}</h6>
         <h6>HOME TEAM: {{ column['home_name'] }}</h6>

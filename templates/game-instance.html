@@ -47,8 +47,9 @@ ul li.roster{
   border-bottom: 1px dashed black;
 }
 
-.info .row .h4 {
+.info h4 {
   text-align: center;
+  border-bottom: 1px dashed black;
 }
 
 </style>
@@ -57,7 +58,9 @@ ul li.roster{
 <h1>{{game['home_name'] ~ ' vs ' ~ game['away_name']}}</h1>
 <br>
 <div class="row">
+    {% if not game['thumbnail'] == "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png" %}
     <img src="{{ game['thumbnail'] }}" alt="Thumbnail" width="100%">
+    {% endif %}
 </div>
 <div class="row align-items-center">
     <div class="column">
@@ -90,15 +93,9 @@ ul li.roster{
     </div>
     <div class="column">
         <div class="container info">
-            <div class="row">
                 <h4>Date: {{ game['date'][4:6] }}-{{ game['date'][6:8] }}-{{ game['date'][0:4] }}</h4>
-            </div>
-            <div class="row">
                 <h4>Venue: {{ game['venue'] }}</h4>
-            </div>
-            <div class="row">
-                <h4>Score: {{ game['score'] }}</h4>
-            </div>
+                <h4 style="border-bottom: none;">Score: {{ game['score'] }}</h4>
         </div>
     </div>
     <div class="column">
