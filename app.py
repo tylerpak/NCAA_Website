@@ -14,7 +14,7 @@ def index():
         input = request.form['content']
         select = request.form['filter']
         if select == "players":
-            return search(input, "none", 1, False, True, False)
+            return search(input, "none", 1,1, False, True, False)
         if select == "teams":
             return search(input, "none", 1, True, False, False)
         else:
