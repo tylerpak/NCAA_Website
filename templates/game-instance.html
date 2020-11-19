@@ -47,8 +47,9 @@ ul li.roster{
   border-bottom: 1px dashed black;
 }
 
-.info .row .h4 {
+.info h4 {
   text-align: center;
+  border-bottom: 1px dashed black;
 }
 
 </style>
@@ -93,15 +94,9 @@ ul li.roster{
     </div>
     <div class="column">
         <div class="container info">
-            <div class="row">
                 <h4>Date: {{ game['date'][4:6] }}-{{ game['date'][6:8] }}-{{ game['date'][0:4] }}</h4>
-            </div>
-            <div class="row">
                 <h4>Venue: {{ game['venue'] }}</h4>
-            </div>
-            <div class="row">
-                <h4>Score: {{ game['score'] }}</h4>
-            </div>
+                <h4 style="border-bottom: none;">Score: {{ game['score'] }}</h4>
         </div>
     </div>
     <div class="column">
