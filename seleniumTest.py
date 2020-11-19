@@ -187,6 +187,178 @@ class seleniumTest(unittest.TestCase):
 
         driver.close() # close the browser window
     
+    def test_mainSearch(self):
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000")
+
+
+        #players
+        text = driver.find_element_by_id('content')
+        text.send_keys("a")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.back()
+
+        text = driver.find_element_by_id('content')
+        text.send_keys("aisdofacsdca")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.back()
+
+        #teams
+        filter = Select(driver.find_element_by_id('filter'))
+        filter.select_by_visible_text('Teams')
+        text = driver.find_element_by_id('content')
+        text.send_keys("a")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.back()
+        filter = Select(driver.find_element_by_id('filter'))
+        filter.select_by_visible_text('Teams')
+
+        text = driver.find_element_by_id('content')
+        text.send_keys("aisdofacsdca")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.back()
+
+        #games
+        filter = Select(driver.find_element_by_id('filter'))
+        filter.select_by_visible_text('Games')
+        text = driver.find_element_by_id('content')
+        text.send_keys("a")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.back()
+        filter = Select(driver.find_element_by_id('filter'))
+        filter.select_by_visible_text('Games')
+
+        text = driver.find_element_by_id('content')
+        text.send_keys("aisdofacsdca")
+        
+        submit = driver.find_element_by_id('submit_search')
+        submit.click()
+
+        result = driver.title
+        self.assertEqual('Internet Database',result[-17:])
+
+        driver.close()
+
+    def test_playerFilter(self):
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000")
+        
+        elem = driver.find_element_by_id('playerButton')
+        elem.click() #click the button
+
+        el = Select(driver.find_element_by_id('filter'))
+        length = len(el.options)
+        i=0
+        while(i<length):
+            el = Select(driver.find_element_by_id('filter'))
+            el.select_by_index(i)
+            submit = driver.find_element_by_id('submit_search')
+            submit.click()
+            result = driver.title
+            self.assertEqual('Internet Database',result[-17:])
+            i = i+1
+
+        driver.close()
+
+    def test_playerSort(self):
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000")
+        
+        elem = driver.find_element_by_id('playerButton')
+        elem.click() #click the button
+
+        el = Select(driver.find_element_by_id('sort'))
+        length = len(el.options)
+        i=0
+        while(i<length):
+            el = Select(driver.find_element_by_id('sort'))
+            el.select_by_index(i)
+            submit = driver.find_element_by_id('submit_search')
+            submit.click()
+            result = driver.title
+            self.assertEqual('Internet Database',result[-17:])
+            i = i+1
+
+        driver.close()
+
+    def test_teamSort(self):
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000")
+        
+        elem = driver.find_element_by_id('teamButton')
+        elem.click() #click the button
+
+        el = Select(driver.find_element_by_id('sort'))
+        length = len(el.options)
+        i=0
+        while(i<length):
+            el = Select(driver.find_element_by_id('sort'))
+            el.select_by_index(i)
+            submit = driver.find_element_by_id('submit_search')
+            submit.click()
+            result = driver.title
+            self.assertEqual('Internet Database',result[-17:])
+            i = i+1
+
+        driver.close()
+
+    def test_gameSort(self):
+        driver = webdriver.Firefox(executable_path=r"./geckodriver")
+        # edit the next line to enter the location of "min.html" on your system
+        driver.get(r"http://127.0.0.1:5000")
+        
+        elem = driver.find_element_by_id('gameButton')
+        elem.click() #click the button
+
+        el = Select(driver.find_element_by_id('sort'))
+        length = len(el.options)
+        i=0
+        while(i<length):
+            el = Select(driver.find_element_by_id('sort'))
+            el.select_by_index(i)
+            submit = driver.find_element_by_id('submit_search')
+            submit.click()
+            result = driver.title
+            self.assertEqual('Internet Database',result[-17:])
+            i = i+1
+
+        driver.close()
+
+
 
 if __name__ == '__main__':
     unittest.main()

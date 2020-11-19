@@ -59,7 +59,7 @@
 <div class="form">
     <form action="/games-1-{{sr}}-{{query}}-{{filter}}" method="POST" autocomplete="off">
         <input type="text" name="content" id="content" placeholder="Search by teams, date, venue.." list="empty" onkeyup="find_related(value)">
-        <input type="submit" value="Apply">
+        <input type="submit" value="Apply" id="submit_search">
         <br>
         <label for="sort">Sort:</label>
         <select name="sort" id="sort"  onclick="changelist()">
