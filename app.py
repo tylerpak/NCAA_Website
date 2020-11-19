@@ -14,11 +14,11 @@ def index():
         input = request.form['content']
         select = request.form['filter']
         if select == "players":
-            return search(input, "none", 1, 0, False, True, False)
+            return search(input, "none", 1, 1, False, True, False)
         if select == "teams":
-            return search(input, "none", 1, 0, True, False, False)
+            return search(input, "none", 1, 1, True, False, False)
         else:
-            return search(input, "none", 1, 0, False, False, True)
+            return search(input, "none", 1, 1, False, False, True)
     else:
         team_list = database.autocomplete('team')
         player_list = database.autocomplete('player')
