@@ -59,7 +59,7 @@
 <div class="form">
     <form action="/players-1-{{sr}}-{{query}}-{{filter}}" method="POST" autocomplete="off" onsubmit="search()">
         <input type="text" name="content" id="content" placeholder="Search for player by name, position, team.." onkeyup="find_related(value)" list="empty">
-        <input type="submit" value="Apply">
+        <input type="submit" value="Apply" id="submit_search">
         <br>
         <label for="filter">Filter by position:</label>
         <select name="filter" id="filter"  onclick="changelist()">
