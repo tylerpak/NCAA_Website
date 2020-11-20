@@ -20,9 +20,9 @@ def index():
         else:
             return search(input, "none", 1, 1, False, False, True)
     else:
-        team_list = database.autocomplete('team')
-        player_list = database.autocomplete('player')
-        game_list = database.autocomplete('game')
+        team_list = database.getRelatedTerms('team')
+        player_list = database.getRelatedTerms('player')
+        game_list = database.getRelatedTerms('game')
         news_list = database.getAllNews()
         return render_template('index.html', team_list=team_list, player_list=player_list, game_list=game_list, news_list = news_list)
 

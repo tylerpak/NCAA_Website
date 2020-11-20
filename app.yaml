@@ -1,5 +1,5 @@
 runtime: python38
-entrypoint: gunicorn -b :$PORT app:app
+entrypoint: gunicorn -b :$PORT app:app --timeout 300
 
 handlers:
   # This configures Google App Engine to serve the files in the app's static
