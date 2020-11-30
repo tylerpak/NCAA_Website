@@ -1,12 +1,11 @@
 import math
 from flask import Flask, render_template, request, redirect, flash
 from pprint import pprint
-
-import database
+from database import Database
 
 
 app = Flask(__name__)
-
+database = Database.getInstance()
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
