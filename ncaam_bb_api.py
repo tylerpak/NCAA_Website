@@ -8,9 +8,10 @@ sportsio_url = "https://api.sportsdata.io/v3/cbb/scores/json/"
 api_key = "ee65f6fe551f4fe98d0b63c5c96b2279"
 
 espn_url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/"
-
 #response = requests.get(sportsio_url+call, headers={"Ocp-Apim-Subscription-Key": api_key})
 
+
+#Refactor #1
 def collect_json(url, filename):
 	response = requests.get(url)
 	data = response.json()
@@ -45,7 +46,7 @@ Attributes:
 class Team:
 	url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/"
 
-	def __init__(self, team_id, *args):
+	def __init__(self, team_id, get_roster=True, get_schedule=True):
 		self.team_id = str(team_id)
 		response = requests.get(self.url+self.team_id).json()
 		try:
@@ -65,11 +66,9 @@ class Team:
 			self.links[x["shortText"]] = [x["href"]]
 		#self.links = {link[0]["shortText"]: link[0]["href"], link[1]["shortText"]: link[1]["href"], link[2]["shortText"]: link[2]["href"], link[3]["shortText"]: link[3]["href"], link[4]["shortText"]: link[4]["href"], link[5]["shortText"]: link[5]["href"]}
 
-		if args:
-			if args[0] == True:
+		if get_roster:
 				self.roster = self.get_team_roster()
-		if len(args) == 2:
-			if args[1] == True:
+		if get_schedule:
 				self.schedule = self.get_team_schedule()
 
 	def __str__(self):
@@ -178,6 +177,8 @@ class Player:
 		self.position = response["athlete"]["position"]["displayName"]
 		self.year = response["athlete"]["displayExperience"]
 
+
+		#Refactor #2
 		try:
 			self.headshot = response["athlete"]["headshot"]["href"]
 		except:
