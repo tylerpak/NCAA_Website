@@ -8,438 +8,365 @@ import youtube_search
 
 # Read only access to database, no writing allowed
 # Loads online database and its collections
-client = MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
-db = client['basketballdb']
-teamCollection = db['Teams']
-playerCollection = db['Players']
-gameCollection = db['Games']
-newsCollection = db['News']
-autocompleteCollection = db['Autocomplete']
+__client = MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
+__db = __client['basketballdb']
+teamCollection = __db['Teams']
+playerCollection = __db['Players']
+gameCollection = __db['Games']
+newsCollection = __db['News']
+autocompleteCollection = __db['Autocomplete']
 
-'''
-Populates the online mongoDB database
-Online database is currently up to date (and is read only), 
-so this method won't add any new entries
-'''
-def setupDB():
-    teamList = Team.populate()
-    for t in teamList:
-        in_db = teamCollection.count_documents({'_id': teamList.get(t)})
-        teamData = None
+class Database:
+    __instance = None
 
-        if in_db == 0: # if not in db, get info from API and add to db
-            team = Team(teamList.get(t))
-            teamData = {
-                '_id': team.team_id, 
-                'name': team.name, 
-                'record': team.record, 
-                'logo': team.logo, 
-                'roster_link': team.roster_link, 
-                'roster': team.roster,
-                'schedule_link': team.schedule_link,
-                'schedule': team.schedule,
-                'links': team.links}
-            teamCollection.insert_one(teamData)
+    def __init__(self):
+        Database.__instance = self
+        
+    def getInstance():
+        if Database.__instance == None:
+            Database()
+        return Database.__instance
 
-        else: # else find team in database
-            for article in teamCollection.find({'_id': teamList.get(t)}).limit(1):
-                teamData = article
+    '''
+    Populates the online mongoDB database
+    Online database is currently up to date (and is read only), 
+    so this method won't add any new entries
+    '''
+    def setupDB(self):
+        teamList = Team.populate()
+        for t in teamList:
+            in_db = teamCollection.count_documents({'_id': teamList.get(t)})
+            teamData = None
 
-        scheduleDict = teamData['schedule']
-        for gameId in scheduleDict:
-            date = scheduleDict[gameId][0]
+            if in_db == 0: # if not in db, get info from API and add to db
+                team = Team(teamList.get(t))
+                teamData = {
+                    '_id': team.team_id, 
+                    'name': team.name, 
+                    'record': team.record, 
+                    'logo': team.logo, 
+                    'roster_link': team.roster_link, 
+                    'roster': team.roster,
+                    'schedule_link': team.schedule_link,
+                    'schedule': team.schedule,
+                    'links': team.links}
+                teamCollection.insert_one(teamData)
 
-            if gameCollection.count_documents({'_id': gameId}) == 0: # if game not in db, add it to db
-                game = Game(gameId, date)
-                gameData = {
-                    '_id': game.game_id,
-                    'date': game.date,
-                    'home_id': game.home_id,
-                    'away_id': game.away_id,
-                    'home_name': game.home_name,
-                    'away_name': game.away_name,
-                    'name': game.name,
-                    'venue': game.venue,
-                    'links': game.links,
-                    'thumbnail': game.thumbnail,
-                    'highlights': game.highlights
-                }
-                gameCollection.insert_one(gameData)
+            else: # else find team in database
+                for article in teamCollection.find({'_id': teamList.get(t)}).limit(1):
+                    teamData = article
 
-        playerIdList = teamData['roster'][1]
-        for p in playerIdList:
-            in_db = playerCollection.count_documents({'_id': p})
+            scheduleDict = teamData['schedule']
+            for gameId in scheduleDict:
+                date = scheduleDict[gameId][0]
 
-            if in_db == 0: #if player not in db, add to db
-                player = Player(p)
-                playerData = {
-                    '_id': player.player_id,
-                    'name': player.name,
-                    'birthplace': player.birthplace,
-                    'height': player.height,
-                    'jersey': player.jersey,
-                    'links': player.links,
-                    'position': player.position,
-                    'stats': player.stats,
-                    'team': player.team,
-                    'weight': player.weight,
-                    'headshot': player.headshot
-                }
-                playerCollection.insert_one(playerData)
-    
-    news = News()
+                if gameCollection.count_documents({'_id': gameId}) == 0: # if game not in db, add it to db
+                    game = Game(gameId, date)
+                    gameData = {
+                        '_id': game.game_id,
+                        'date': game.date,
+                        'home_id': game.home_id,
+                        'away_id': game.away_id,
+                        'home_name': game.home_name,
+                        'away_name': game.away_name,
+                        'name': game.name,
+                        'venue': game.venue,
+                        'links': game.links,
+                        'thumbnail': game.thumbnail,
+                        'highlights': game.highlights
+                    }
+                    gameCollection.insert_one(gameData)
 
-    for a in news.articles:
-        newsData = {
-            'headline': a['headline'],
-            'description': a['description'],
-            'images': a['images']
-        }
-        newsCollection.insert(newsData)
+            playerIdList = teamData['roster'][1]
+            for p in playerIdList:
+                in_db = playerCollection.count_documents({'_id': p})
 
+                if in_db == 0: #if player not in db, add to db
+                    player = Player(p)
+                    playerData = {
+                        '_id': player.player_id,
+                        'name': player.name,
+                        'birthplace': player.birthplace,
+                        'height': player.height,
+                        'jersey': player.jersey,
+                        'links': player.links,
+                        'position': player.position,
+                        'stats': player.stats,
+                        'team': player.team,
+                        'weight': player.weight,
+                        'headshot': player.headshot
+                    }
+                    playerCollection.insert_one(playerData)
+        
+        news = News()
 
-'''
-Returns a dictionary of the Team if database has the teamId, None otherwise
-'''
-def getTeam(teamId):
-    team = None
-    for t in teamCollection.find({'_id': str(teamId)}).limit(1):
-        team = t
-    return team
-
-
-'''
-Returns a dictionary of the Player if database has the teamId, None otherwise
-'''
-def getPlayer(playerId):
-    player = None
-    for p in playerCollection.find({'_id': str(playerId)}).limit(1):
-        player = p
-    return player
+        for a in news.articles:
+            newsData = {
+                'headline': a['headline'],
+                'description': a['description'],
+                'images': a['images']
+            }
+            newsCollection.insert(newsData)
 
 
-'''
-Returns a dictionary of the Game if database has the teamId, None otherwise
-'''
-def getGame(gameId):
-    game = None
-    for g in gameCollection.find({'_id': str(gameId)}).limit(1):
-        game = g
-    return game
+    '''
+    Returns a dictionary of the Team if database has the teamId, None otherwise
+    '''
+    def getTeam(self, teamId):
+        team = None
+        for t in teamCollection.find({'_id': str(teamId)}).limit(1):
+            team = t
+        return team
 
 
-'''
-Finds all news that contains the keyword in the headline or description
-'''
-def getRelatedNews(keyword):
-    newsList = []
-    splitWords = keyword.split()
-
-    for n in newsCollection.find():
-        for word in splitWords:
-            if re.search(word, n['description']) or re.search(word, n['headline']):
-                newsList.append(n)
-                break
-    
-    return newsList
+    '''
+    Returns a dictionary of the Player if database has the teamId, None otherwise
+    '''
+    def getPlayer(self, playerId):
+        player = None
+        for p in playerCollection.find({'_id': str(playerId)}).limit(1):
+            player = p
+        return player
 
 
-'''
-Returns a list of all Team dictionaries in database
-'''
-def getAllTeams(page_number):
-    teamList = []
-    for t in teamCollection.find().skip(24 * (page_number - 1)).limit(24):
-        teamList.append(t)
-    return teamList
+    '''
+    Returns a dictionary of the Game if database has the teamId, None otherwise
+    '''
+    def getGame(self, gameId):
+        game = None
+        for g in gameCollection.find({'_id': str(gameId)}).limit(1):
+            game = g
+        return game
 
 
-'''
-Returns number of pages necessary for teams 
-'''
-def getAllTeamsPgCount():
-    return teamCollection.count() / 24
+    '''
+    Finds all news that contains the keyword in the headline or description
+    '''
+    def getRelatedNews(self, keyword):
+        newsList = []
+        splitWords = keyword.split()
+
+        for n in newsCollection.find():
+            for word in splitWords:
+                if re.search(word, n['description']) or re.search(word, n['headline']):
+                    newsList.append(n)
+                    break
+        
+        return newsList
 
 
-'''
-Returns a list of all Player dictionaries in database
-'''
-def getAllPlayers(page_number):
-    playerList = []
-    for p in playerCollection.find().skip(24*(page_number-1)).limit(24):
-        playerList.append(p)
-    return playerList
-
-'''
-Returns number of pages necessary for players 
-'''
-def getAllPlayersPgCount():
-    return playerCollection.count() / 24
-
-'''
-Returns a list of all Games dictionaries in database
-'''
-def getAllGames(page_number):
-    gameList = []
-    for g in gameCollection.find().skip(24 * (page_number - 1)).limit(24):
-        gameList.append(g)
-    return gameList
-
-'''
-Returns number of pages necessary for teams 
-'''
-def getAllGamesPgCount():
-    return gameCollection.count() / 24
+    '''
+    Returns a list of all Team dictionaries in database
+    '''
+    def getAllTeams(self, page_number):
+        teamList = []
+        for t in teamCollection.find().skip(24 * (page_number - 1)).limit(24):
+            teamList.append(t)
+        return teamList
 
 
-'''
-Get all news articles in database
-'''
-def getAllNews():
-    articles = []
-    for a in newsCollection.find():
-        articles.append(a)
-    
-    return articles
+    '''
+    Returns number of pages necessary for teams 
+    '''
+    def getAllTeamsPgCount(self):
+        return teamCollection.count() / 24
 
-'''
-Sort player results
-'''
-def sortPlayers(sort, players):
-    if sort == 2:
-        players.sort(key=lambda x: x['name'])
-    elif sort == 3:
-        players.sort(key=lambda x: x['name'], reverse=True)
-    elif sort == 4:
-        players.reverse()
-    elif sort == 5:
-        players.sort(key=lambda x: x['weight'])
-    elif sort == 6:
-        players.sort(key=lambda x: x['weight'], reverse=True)
-    else:
+
+    '''
+    Returns a list of all Player dictionaries in database
+    '''
+    def getAllPlayers(self, page_number):
+        playerList = []
+        for p in playerCollection.find().skip(24*(page_number-1)).limit(24):
+            playerList.append(p)
+        return playerList
+
+    '''
+    Returns number of pages necessary for players 
+    '''
+    def getAllPlayersPgCount(self):
+        return playerCollection.count() / 24
+
+    '''
+    Returns a list of all Games dictionaries in database
+    '''
+    def getAllGames(sefl, page_number):
+        gameList = []
+        for g in gameCollection.find().skip(24 * (page_number - 1)).limit(24):
+            gameList.append(g)
+        return gameList
+
+    '''
+    Returns number of pages necessary for teams 
+    '''
+    def getAllGamesPgCount(self):
+        return gameCollection.count() / 24
+
+
+    '''
+    Get all news articles in database
+    '''
+    def getAllNews(self):
+        articles = []
+        for a in newsCollection.find():
+            articles.append(a)
+        
+        return articles
+
+    '''
+    Sort player results
+    '''
+    def sortPlayers(self, sort, players):
+        if sort == 2:
+            players.sort(key=lambda x: x['name'])
+        elif sort == 3:
+            players.sort(key=lambda x: x['name'], reverse=True)
+        elif sort == 4:
+            players.reverse()
+        elif sort == 5:
+            players.sort(key=lambda x: x['weight'])
+        elif sort == 6:
+            players.sort(key=lambda x: x['weight'], reverse=True)
+        else:
+            return players
         return players
-    return players
 
 
-'''
-Sort team results
-'''
-def sortTeams(sort, teams):
-    if sort == 2:
-        teams.sort(key=lambda x: x['name'])
-    elif sort == 3:
-        teams.sort(key=lambda x: x['name'], reverse=True)
-    else:
+    '''
+    Sort team results
+    '''
+    def sortTeams(self, sort, teams):
+        if sort == 2:
+            teams.sort(key=lambda x: x['name'])
+        elif sort == 3:
+            teams.sort(key=lambda x: x['name'], reverse=True)
+        else:
+            return teams
         return teams
-    return teams
 
 
-'''
-Sort game results
-'''
-def sortGames(sort, games):
-    if sort == 2:
-        games.sort(key=lambda x: x['home_name'])
-    elif sort == 3:
-        games.sort(key=lambda x: x['home_name'], reverse=True)
-    elif sort == 4:
-        games.sort(key=lambda x: x['away_name'])
-    elif sort == 5:
-        games.sort(key=lambda x: x['away_name'], reverse=True)
-    elif sort == 6:
-        games.sort(key=lambda x: x['venue'])
-    elif sort ==7:
-        games.sort(key=lambda x: x['venue'], reverse=True)
-    else:
+    '''
+    Sort game results
+    '''
+    def sortGames(self, sort, games):
+        if sort == 2:
+            games.sort(key=lambda x: x['home_name'])
+        elif sort == 3:
+            games.sort(key=lambda x: x['home_name'], reverse=True)
+        elif sort == 4:
+            games.sort(key=lambda x: x['away_name'])
+        elif sort == 5:
+            games.sort(key=lambda x: x['away_name'], reverse=True)
+        elif sort == 6:
+            games.sort(key=lambda x: x['venue'])
+        elif sort ==7:
+            games.sort(key=lambda x: x['venue'], reverse=True)
+        else:
+            return games
         return games
-    return games
 
 
-'''
-Returns a list of all entries in the database that contains the query
-Default search goes through all collections in database
-'''
-def searchDatabase(query, filter, page_number, sort, searchTeam = True, searchPlayer = True, searchGame = True,):
-    matches = []
+    '''
+    Returns a list of all entries in the database that contains the query
+    Default search goes through all collections in database
+    '''
+    def searchDatabase(self, query, filter, page_number, sort, searchTeam = True, searchPlayer = True, searchGame = True,):
+        matches = []
 
-    if searchTeam:
-        for t in teamCollection.find():
-            for value in t.values():
-                if re.search(query.lower(), str(value).lower()):
-                    matches.append(t)
-                    break
-    
-    if searchPlayer:
-        for p in playerCollection.find():
-            flag1 = False
-            if filter == "none":
-                flag2 = True
-            else:
-                flag2 = False
-            for value in p.values():
-                if re.search(filter, str(value).lower()):
+        if searchTeam:
+            for t in teamCollection.find():
+                for value in t.values():
+                    if re.search(query.lower(), str(value).lower()):
+                        matches.append(t)
+                        break
+        
+        if searchPlayer:
+            for p in playerCollection.find():
+                flag1 = False
+                if filter == "none":
                     flag2 = True
-                if re.search(query.lower(), str(value).lower()):
-                    flag1 = True
-                if flag1 and flag2 is True:
-                    matches.append(p)
-                    break
+                else:
+                    flag2 = False
+                for value in p.values():
+                    if re.search(filter, str(value).lower()):
+                        flag2 = True
+                    if re.search(query.lower(), str(value).lower()):
+                        flag1 = True
+                    if flag1 and flag2 is True:
+                        matches.append(p)
+                        break
 
-    if searchGame:
-        for g in gameCollection.find():
-            for value in g.values():
-                if re.search(query.lower(), str(value).lower()):
-                    matches.append(g)
-                    break
+        if searchGame:
+            for g in gameCollection.find():
+                for value in g.values():
+                    if re.search(query.lower(), str(value).lower()):
+                        matches.append(g)
+                        break
 
-    if searchPlayer:
-        matches = sortPlayers(sort, matches)
-    if searchTeam:
-        matches = sortTeams(sort, matches)
-    if searchGame:
-        matches = sortGames(sort, matches)
+        if searchPlayer:
+            matches = sortPlayers(sort, matches)
+        if searchTeam:
+            matches = sortTeams(sort, matches)
+        if searchGame:
+            matches = sortGames(sort, matches)
 
-    output = matches[(24*(page_number-1)):]
-    output = output[:24]
-    output.append(len(matches))
-    return output
+        output = matches[(24*(page_number-1)):]
+        output = output[:24]
+        output.append(len(matches))
+        return output
 
-'''
-Gets all words related to the model (team, player, or games) for autocomplete
-Used to store in database, don't use in app.py (look at getRelatedTerms())
-'''
-def autocomplete(model):
-    matches = []
-    if re.match('team', model):
-        for t in teamCollection.find():
-            matches.append(t['name'])
-            for player in t['roster'][0]:
-                matches.append(player)
+    '''
+    Gets all words related to the model (team, player, or games) for autocomplete
+    Used to store in database, don't use in app.py (look at getRelatedTerms())
+    '''
+    def autocomplete(self, model):
+        matches = []
+        if re.match('team', model):
+            for t in teamCollection.find():
+                matches.append(t['name'])
+                for player in t['roster'][0]:
+                    matches.append(player)
 
-    if re.match('player', model):
-        for p in playerCollection.find():
-            if p['name'] not in matches:
-                matches.append(p['name'])
-            if p['team'] not in matches:
-                matches.append(p['team'])
-            if p['position'] not in matches:
-                matches.append(p['position'])
+        if re.match('player', model):
+            for p in playerCollection.find():
+                if p['name'] not in matches:
+                    matches.append(p['name'])
+                if p['team'] not in matches:
+                    matches.append(p['team'])
+                if p['position'] not in matches:
+                    matches.append(p['position'])
 
-    if re.match('game', model):
-        for g in gameCollection.find():
-            if g['name'] not in matches:
-                matches.append(g['name'])
-            if g['home_name'] not in matches:
-                matches.append(g['home_name'])
-            if g['away_name'] not in matches:
-                matches.append(g['away_name'])
-            if g['venue'] not in matches:
-                matches.append(g['venue'])
+        if re.match('game', model):
+            for g in gameCollection.find():
+                if g['name'] not in matches:
+                    matches.append(g['name'])
+                if g['home_name'] not in matches:
+                    matches.append(g['home_name'])
+                if g['away_name'] not in matches:
+                    matches.append(g['away_name'])
+                if g['venue'] not in matches:
+                    matches.append(g['venue'])
 
-    matches.sort()
-    return matches
-
-
-'''
-Gets all the related terms to model (team, player, game) from the database
-Returns an empty list if model is not found
-'''
-def getRelatedTerms(model):
-    matches = []
-
-    for related in autocompleteCollection.find({'_id': model}):
-        return related['related_terms']
-
-    return matches
+        matches.sort()
+        return matches
 
 
-'''
-Updates the database with new fields, or new values to exisiting fields
-Online database is up to date and read only, so don't call this method
-'''
-def updateDB():
-    return 0
+    '''
+    Gets all the related terms to model (team, player, game) from the database
+    Returns an empty list if model is not found
+    '''
+    def getRelatedTerms(self, model):
+        matches = []
 
-    # news = News()
+        for related in autocompleteCollection.find({'_id': model}):
+            return related['related_terms']
 
-    # for a in news.articles:
-    #     newsData = {
-    #         'headline': a['headline'],
-    #         'description': a['description'],
-    #         'images': a['images'],
-    #         'link': a['link']
-    #     }
-    #     newsCollection.insert(newsData)
+        return matches
 
-    # for g in gameCollection.find():
-    #     try:
-    #         thing = g['home_logo']
-    #         thing = g['away_logo']
-    #     except:
-    #         home_team = getTeam(g['home_id'])
-    #         away_team = getTeam(g['away_id'])
 
-    #         if home_team is None:
-    #             home_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
-    #         else:
-    #             home_logo = home_team['logo']
-
-    #         if away_team is None:
-    #             away_logo = "https://cdn0.iconfinder.com/data/icons/files-49/32/tn12_file_broken_warning_error_mistake_document_interface_-512.png"
-    #         else:
-    #             away_logo = away_team['logo']
-
-    #         gameData = {
-    #             "home_logo": home_logo,
-    #             "away_logo": away_logo
-    #         }
-    #         gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
-
-    # for g in gameCollection.find({'video': '---'}):
-    #     year = g['date'][:4]
-    #     query = "basketball {} highlights {}\n".format(g['name'], year)
-    #     url = youtube_search.search_for_video(query)
-    #     gameData = {
-    #         "video": url
-    #     }
-    #     gameCollection.find_one_and_update({'_id': g['_id']}, {'$set': gameData})
-
-    # terms = autocomplete('team')
-    # autocompleteCollection.insert({'_id': 'team', 'related_terms': terms})
-    # print('done teams')
-    # terms = autocomplete('player')
-    # autocompleteCollection.insert({'_id': 'player', 'related_terms': terms})
-    # print('done player')
-    # terms = autocomplete('games')
-    # autocompleteCollection.insert({'_id': 'game', 'related_terms': terms})
-
-    # for t in teamCollection.find():
-    #     team = Team(t['_id'])
-    #     game_dict = team.get_team_schedule()
-    #     teamCollection.find_one_and_update({'_id': t['_id']}, {'$set': {'schedule': game_dict}})
-        
-    # for g in gameCollection.find():
-        # game = Game(g['_id'], g['date'])
-        
-        # gameData = {
-        #     'home_id': game.home_id,
-        #     'away_id': game.away_id
-        #     # 'thumbnail': game.thumbnail,
-        #     # 'highlights': game.highlights,
-            # 'score': game.score
-        # }
-        # if teamCollection.count({'_id': game.away_id}) == 0:
-            # print("not away: {}".format(gameCollection.count({'away_id': game.away_id})))
-            # print("not home: {}".format(gameCollection.count({'home_id': game.away_id})))
-            # gameCollection.delete_many({'away_id': game.away_id})
-            # gameCollection.delete_many({'home_id': game.away_id})
-
-    # for p in playerCollection.find():
-    #     player = Player(p['_id'])
-    #     playerData = {
-    #         'team': player.team
-    #         # 'headshot': player.headshot
-    #     }
-    #     if teamCollection.count(playerData) == 0:
-    #         playerCollection.delete_many(playerData)
-    #         # playerCollection.find_one_and_update({'_id': p['_id']}, {'$set': playerData})
+    '''
+    Updates the database with new fields, or new values to exisiting fields
+    Online database is up to date and read only, so don't call this method
+    '''
+    def updateDB(self):
+        return 0
