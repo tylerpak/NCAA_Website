@@ -6,22 +6,37 @@ from pprint import pprint
 import re
 import youtube_search
 
-# Read only access to database, no writing allowed
-# Loads online database and its collections
-__client = MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
-__db = __client['basketballdb']
-teamCollection = __db['Teams']
-playerCollection = __db['Players']
-gameCollection = __db['Games']
-newsCollection = __db['News']
-autocompleteCollection = __db['Autocomplete']
-
 class Database:
     __instance = None
+    client = None
+    db = None
+    teamCollection = None
+    playerCollection = None
+    gameCollection = None
+    newsCollection = None
+    autocompleteCollection = None
 
+    '''
+    Constructs only 1 instance of the class
+    '''
     def __init__(self):
+        if Database.__instance != None:
+            raise Exception("Multiple instances not allowed")
+
+        # Read only access to database, no writing allowed
+        # Loads online database and its collections
+        self.client = MongoClient("mongodb+srv://college-basketball-infosite:YQYk9tu9KWZVckXU@cluster0.vkgny.gcp.mongodb.net/basketballdb?retryWrites=true&w=majority")
+        self.db = self.client['basketballdb']
+        self.teamCollection = self.db['Teams']
+        self.playerCollection = self.db['Players']
+        self.gameCollection = self.db['Games']
+        self.newsCollection = self.db['News']
+        self.autocompleteCollection = self.db['Autocomplete']
         Database.__instance = self
         
+    '''
+    Creates an instance if not yet created and returns the single instance
+    '''
     def getInstance():
         if Database.__instance == None:
             Database()
@@ -35,7 +50,7 @@ class Database:
     def setupDB(self):
         teamList = Team.populate()
         for t in teamList:
-            in_db = teamCollection.count_documents({'_id': teamList.get(t)})
+            in_db = self.teamCollection.count_documents({'_id': teamList.get(t)})
             teamData = None
 
             if in_db == 0: # if not in db, get info from API and add to db
@@ -50,17 +65,17 @@ class Database:
                     'schedule_link': team.schedule_link,
                     'schedule': team.schedule,
                     'links': team.links}
-                teamCollection.insert_one(teamData)
+                self.teamCollection.insert_one(teamData)
 
             else: # else find team in database
-                for article in teamCollection.find({'_id': teamList.get(t)}).limit(1):
+                for article in self.teamCollection.find({'_id': teamList.get(t)}).limit(1):
                     teamData = article
 
             scheduleDict = teamData['schedule']
             for gameId in scheduleDict:
                 date = scheduleDict[gameId][0]
 
-                if gameCollection.count_documents({'_id': gameId}) == 0: # if game not in db, add it to db
+                if self.gameCollection.count_documents({'_id': gameId}) == 0: # if game not in db, add it to db
                     game = Game(gameId, date)
                     gameData = {
                         '_id': game.game_id,
@@ -75,11 +90,11 @@ class Database:
                         'thumbnail': game.thumbnail,
                         'highlights': game.highlights
                     }
-                    gameCollection.insert_one(gameData)
+                    self.gameCollection.insert_one(gameData)
 
             playerIdList = teamData['roster'][1]
             for p in playerIdList:
-                in_db = playerCollection.count_documents({'_id': p})
+                in_db = self.playerCollection.count_documents({'_id': p})
 
                 if in_db == 0: #if player not in db, add to db
                     player = Player(p)
@@ -96,7 +111,7 @@ class Database:
                         'weight': player.weight,
                         'headshot': player.headshot
                     }
-                    playerCollection.insert_one(playerData)
+                    self.playerCollection.insert_one(playerData)
         
         news = News()
 
@@ -106,7 +121,7 @@ class Database:
                 'description': a['description'],
                 'images': a['images']
             }
-            newsCollection.insert(newsData)
+            self.newsCollection.insert(newsData)
 
 
     '''
@@ -114,7 +129,7 @@ class Database:
     '''
     def getTeam(self, teamId):
         team = None
-        for t in teamCollection.find({'_id': str(teamId)}).limit(1):
+        for t in self.teamCollection.find({'_id': str(teamId)}).limit(1):
             team = t
         return team
 
@@ -124,7 +139,7 @@ class Database:
     '''
     def getPlayer(self, playerId):
         player = None
-        for p in playerCollection.find({'_id': str(playerId)}).limit(1):
+        for p in self.playerCollection.find({'_id': str(playerId)}).limit(1):
             player = p
         return player
 
@@ -134,7 +149,7 @@ class Database:
     '''
     def getGame(self, gameId):
         game = None
-        for g in gameCollection.find({'_id': str(gameId)}).limit(1):
+        for g in self.gameCollection.find({'_id': str(gameId)}).limit(1):
             game = g
         return game
 
@@ -146,7 +161,7 @@ class Database:
         newsList = []
         splitWords = keyword.split()
 
-        for n in newsCollection.find():
+        for n in self.newsCollection.find():
             for word in splitWords:
                 if re.search(word, n['description']) or re.search(word, n['headline']):
                     newsList.append(n)
@@ -160,7 +175,7 @@ class Database:
     '''
     def getAllTeams(self, page_number):
         teamList = []
-        for t in teamCollection.find().skip(24 * (page_number - 1)).limit(24):
+        for t in self.teamCollection.find().skip(24 * (page_number - 1)).limit(24):
             teamList.append(t)
         return teamList
 
@@ -169,7 +184,7 @@ class Database:
     Returns number of pages necessary for teams 
     '''
     def getAllTeamsPgCount(self):
-        return teamCollection.count() / 24
+        return self.teamCollection.count() / 24
 
 
     '''
@@ -177,7 +192,7 @@ class Database:
     '''
     def getAllPlayers(self, page_number):
         playerList = []
-        for p in playerCollection.find().skip(24*(page_number-1)).limit(24):
+        for p in self.playerCollection.find().skip(24*(page_number-1)).limit(24):
             playerList.append(p)
         return playerList
 
@@ -185,14 +200,14 @@ class Database:
     Returns number of pages necessary for players 
     '''
     def getAllPlayersPgCount(self):
-        return playerCollection.count() / 24
+        return self.playerCollection.count() / 24
 
     '''
     Returns a list of all Games dictionaries in database
     '''
     def getAllGames(sefl, page_number):
         gameList = []
-        for g in gameCollection.find().skip(24 * (page_number - 1)).limit(24):
+        for g in self.gameCollection.find().skip(24 * (page_number - 1)).limit(24):
             gameList.append(g)
         return gameList
 
@@ -200,7 +215,7 @@ class Database:
     Returns number of pages necessary for teams 
     '''
     def getAllGamesPgCount(self):
-        return gameCollection.count() / 24
+        return self.gameCollection.count() / 24
 
 
     '''
@@ -208,7 +223,7 @@ class Database:
     '''
     def getAllNews(self):
         articles = []
-        for a in newsCollection.find():
+        for a in self.newsCollection.find():
             articles.append(a)
         
         return articles
@@ -274,14 +289,14 @@ class Database:
         matches = []
 
         if searchTeam:
-            for t in teamCollection.find():
+            for t in self.teamCollection.find():
                 for value in t.values():
                     if re.search(query.lower(), str(value).lower()):
                         matches.append(t)
                         break
         
         if searchPlayer:
-            for p in playerCollection.find():
+            for p in self.playerCollection.find():
                 flag1 = False
                 if filter == "none":
                     flag2 = True
@@ -297,18 +312,18 @@ class Database:
                         break
 
         if searchGame:
-            for g in gameCollection.find():
+            for g in self.gameCollection.find():
                 for value in g.values():
                     if re.search(query.lower(), str(value).lower()):
                         matches.append(g)
                         break
 
         if searchPlayer:
-            matches = sortPlayers(sort, matches)
+            matches = self.sortPlayers(sort, matches)
         if searchTeam:
-            matches = sortTeams(sort, matches)
+            matches = self.sortTeams(sort, matches)
         if searchGame:
-            matches = sortGames(sort, matches)
+            matches = self.sortGames(sort, matches)
 
         output = matches[(24*(page_number-1)):]
         output = output[:24]
@@ -322,13 +337,13 @@ class Database:
     def autocomplete(self, model):
         matches = []
         if re.match('team', model):
-            for t in teamCollection.find():
+            for t in self.teamCollection.find():
                 matches.append(t['name'])
                 for player in t['roster'][0]:
                     matches.append(player)
 
         if re.match('player', model):
-            for p in playerCollection.find():
+            for p in self.playerCollection.find():
                 if p['name'] not in matches:
                     matches.append(p['name'])
                 if p['team'] not in matches:
@@ -337,7 +352,7 @@ class Database:
                     matches.append(p['position'])
 
         if re.match('game', model):
-            for g in gameCollection.find():
+            for g in self.gameCollection.find():
                 if g['name'] not in matches:
                     matches.append(g['name'])
                 if g['home_name'] not in matches:
@@ -358,7 +373,7 @@ class Database:
     def getRelatedTerms(self, model):
         matches = []
 
-        for related in autocompleteCollection.find({'_id': model}):
+        for related in self.autocompleteCollection.find({'_id': model}):
             return related['related_terms']
 
         return matches
